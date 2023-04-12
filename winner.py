@@ -222,6 +222,7 @@ def flush(table_cards, player):
     for i in range(5):
         flush[table_cards[i][1]].append(table_cards[i][0])
     # if there are more than 4 items in a suit, we have found a flush
+
     for i in flush:
         if len(flush[i])>4:
             suit = i
@@ -237,7 +238,7 @@ def flush(table_cards, player):
         #quick sort the cards with flush
         quickSort(flush[suit], 0, len(flush[suit])-1)
         #return true and the high card of flush
-        return [hit, flush[suit][-1]]
+        return [hit, flush[suit]]
     else:
         #return false and empty list if no flush
         return[hit, suit]
