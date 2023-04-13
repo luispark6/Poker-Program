@@ -1,6 +1,8 @@
 from Setup_deal import *
 import winner
 import ties_wins
+import winners_circle
+import probability
 
 def main():
     while True:
@@ -11,13 +13,29 @@ def main():
                 y=int(x)
             break #breaks if valid int is inputted
         except:
-            print("Please input an integer in the range of 2-6")
+            print("Please input an integer in the range of 2-6 ")
 
     round1 = Poker(num_player) #basic initialization of cards, players, etc. 
     round1.deal_cards() #deals the cards to all the players in the game
 
     #display users cards in terminal
     print("Your cards are: "+ str(round1.player[1][0][0])+" of "+str(round1.player[1][0][1])+\
+        "s || " + str(round1.player[1][1][0])+" of "+ str(round1.player[1][1][1])+"s ")
+    #we need this boolean to indicate if we want to print the winners or ties. If we choose
+    #to show probabilities, it will print ten thousand times if we dont set print_txt equal to false
+    print_txt=True
+    show_probability = input("Would you like to see your probabilities of winning preflop? y/n: ")
+    while show_probability != 'y' and show_probability != "n":
+        show_probability = input("Please input 'y' or 'n': ")
+
+    #calls function to check the percentage won with your hand
+    #we set round_sub = round1 because we dont want to mess with the current round we're in. We want to maintain
+    #the information for the current round because we will continute to play
+    if show_probability == 'y':
+        print_txt=False
+        round_sub = round1
+        percentage = probability.probability_preflop_hidden(round_sub, num_player, print_txt)
+        print("You have a "+str(percentage)+"% chance to win with cards: "+ str(round1.player[1][0][0])+" of "+str(round1.player[1][0][1])+\
         "s || " + str(round1.player[1][1][0])+" of "+ str(round1.player[1][1][1])+"s")
 
     #Option to show your opponents' hands
@@ -36,6 +54,20 @@ def main():
             str(round1.player[i][0][1])+"s || " + str(round1.player[i][1][0])+" of "+ \
             str(round1.player[i][1][1])+"s \n")
             print("---------------------------------------------------")
+        
+        show_probability1 = input("Would you like to see your probabilities of winning preflop with opponents' cards revealed? y/n: ")
+        while show_probability1 != 'y' and show_probability1 != "n":
+            show_probability1 = input("Please input 'y' or 'n': ")
+
+
+        if show_probability1 == 'y':
+            print_txt=False
+            round_sub = round1
+            percentage = probability.probability_preflop_revealed(round_sub, num_player, print_txt)
+            print("You have a "+str(percentage)+"% chance to win with cards: "+ str(round1.player[1][0][0])+" of "+str(round1.player[1][0][1])+\
+            "s || " + str(round1.player[1][1][0])+" of "+ str(round1.player[1][1][1])+"s")
+            return
+
 
     #deals the flop
     round1.deal_flop()
@@ -65,149 +97,34 @@ def main():
     print("\nYour cards are: "+ str(round1.player[1][0][0])+" of "+str(round1.player[1][0][1])+\
         "s || " + str(round1.player[1][1][0])+" of "+ str(round1.player[1][1][1])+"s \n")
 
+
+
+    #table_cards = []
+    #table_cards.append([4, "Heart"])
+    #table_cards.append([7, "Spade"])
+    #table_cards.append([10, "Clove"])
+    #table_cards.append(["Jack", "Heart"])
+    #table_cards.append([2, "Diamond"])
+    #player = {}
+    #player[1]=[]
+    #player[1].append([3, "Heart"])
+    #player[1].append([8, "Spade"])
+    #player[2]=[]
+    #player[2].append(["Ace", "Clove"])
+    #player[2].append([9, "Heart"])
+    #player[3]=[]
+    #player[3].append(["Ace", "Heart"])
+    #player[3].append([8, "Spade"])
+    #player[4]=[]
+    #player[4].append([5, "Clove"])
+    #player[4].append([9, "Diamond"])
+
+
+    print_txt=True
+    winners_circle.winning_players(round1.player, round1.table_cards, num_player, print_txt)
+
+
     
-    #players_points = []
-
-    #for i in range(1, num_player+1):
-        #flush_indicator1=winner.flush(round1.table_cards, round1.player[i])
-        #straight_indicator1= winner.straight(round1.table_cards, round1.player[i])
-        #four_indicator1 = winner.four(round1.table_cards, round1.player[i])
-        #three_indicator1 = winner.three(round1.table_cards, round1.player[i])
-        #pair_indicator1 = winner.pair(round1.table_cards, round1.player[i])
-        #if flush_indicator1[0]==True and straight_indicator1[0] == True and straight_indicator1[1] == 14:
-            #players_points.append(10)
-        #elif flush_indicator1[0]==True and straight_indicator1[0] == True: players_points.append(9)
-        #elif four_indicator1[0] == True: players_points.append(8)
-        #elif three_indicator1[0] ==True and pair_indicator1[0] == True: players_points.append(7)
-        #elif flush_indicator1[0]==True: players_points.append(6)
-        #elif straight_indicator1[0] == True: players_points.append(5)
-        #elif three_indicator1[0] == True: players_points.append(4)
-        #elif pair_indicator1[0] == True and len(pair_indicator1[1])>1: players_points.append(3)
-        #elif pair_indicator1[0] == True and len(pair_indicator1[1])==1: players_points.append(2)
-        #else:
-            #players_points.append(1)
-
-    table_cards = []
-    
-    table_cards.append([4, "Heart"])
-    table_cards.append([7, "Spade"])
-    table_cards.append([10, "Clove"])
-    table_cards.append(["Jack", "Heart"])
-    table_cards.append([2, "Diamond"])
-    player = {}
-
-    player[1]=[]
-    player[1].append([3, "Heart"])
-    player[1].append([8, "Spade"])
-    player[2]=[]
-    player[2].append(["Queen", "Clove"])
-    player[2].append([3, "Heart"])
-    player[3]=[]
-    player[3].append([5, "Heart"])
-    player[3].append([8, "Spade"])
-    player[4]=[]
-    player[4].append([5, "Clove"])
-    player[4].append([9, "Diamond"])
-    players_points = []
-
-
-    for i in range(1, num_player+1):
-        flush_indicator1=winner.flush(table_cards, player[i])
-        straight_indicator1= winner.straight(table_cards, player[i])
-        four_indicator1 = winner.four(table_cards, player[i])
-        three_indicator1 = winner.three(table_cards, player[i])
-        pair_indicator1 = winner.pair(table_cards, player[i])
-        validity =False
-        #checks condition if royal flush is valid. We pop because we only care about top 5 cards
-        if flush_indicator1[0]==True and straight_indicator1[0] == True and flush_indicator1[1][-1]==14:
-            if len(flush_indicator1[1]) ==7:
-                flush_indicator1[1].pop(0)
-                flush_indicator1[1].pop(0)
-            elif len(flush_indicator1[1]) ==6:
-                flush_indicator1[1].pop(0)
-            indicator = 0
-            for i in range(len(flush_indicator1[1])-1):
-                if flush_indicator1[1][i]+1 == flush_indicator1[1][i+1]:
-                    indicator = indicator+1
-            if indicator >= 4:
-                validity=True
-                players_points.append(10)
-        #checks if flush is also a straight
-        if flush_indicator1[0]==True and straight_indicator1[0] == True and validity == False:
-            indicator = 0
-            for i in range(len(flush_indicator1[1])-1):
-                if flush_indicator1[1][i]+1 == flush_indicator1[1][i+1]:
-                    indicator = indicator+1
-                if i==3 and flush_indicator1[1][i] == 5:
-                    if flush_indicator1[1][i+1]==14:
-                        indicator=indicator+1
-            if indicator >=4:
-                players_points.append(9)
-            else:
-                players_points.append(6)
-        elif four_indicator1[0] == True: players_points.append(8)
-        elif (three_indicator1[0] ==True and pair_indicator1[0] == True) or (three_indicator1[0]==True and len(three_indicator1[1])>1): players_points.append(7)
-        elif flush_indicator1[0]==True and validity == False: 
-            players_points.append(6)
-        elif straight_indicator1[0] == True and validity == False: players_points.append(5)
-        elif three_indicator1[0] == True and validity == False: players_points.append(4)
-        elif pair_indicator1[0] == True and len(pair_indicator1[1])>1 and validity == False: players_points.append(3)
-        elif pair_indicator1[0] == True and len(pair_indicator1[1])==1 and validity == False: players_points.append(2)
-        else:
-            if validity == False:
-                players_points.append(1)
-
-
-
-
-    winners_circle = []
-    #index of scores are the players with the best score
-    indexOfScores = []
-    #bestScore is the highest score of all the player's score
-    bestScore = max(players_points)
-    #players_points contain the scores of each player and the index of the scores
-    #is an indicator which player has that score. Since players start with 1, 
-    #we need to append i+1 because i starts at 0
-    
-    for i in range(len(players_points)):
-        if players_points[i] == bestScore:
-            indexOfScores.append(i+1)
-    
-    if len(indexOfScores) ==1:
-        print("Player "+ str(indexOfScores[0])+" wins!")
-        winners_circle.append(indexOfScores[0])
-        print(winners_circle)
-
-    elif bestScore == 2:
-        winners_circle = ties_wins.pair_ties(players_points, player, table_cards, indexOfScores)
-    elif bestScore == 3:
-        winners_circle = ties_wins.two_pair_tie(players_points, player, table_cards, indexOfScores)
-        
-    elif bestScore == 4:
-        winners_circle = ties_wins.three_tie(players_points, player, table_cards, indexOfScores)
-        print(winners_circle)
-    elif bestScore == 5:
-        winners_circle = ties_wins.straight_ties(players_points, player, table_cards, indexOfScores)
-        print(winners_circle)
-    elif bestScore == 6:
-        winners_circle = ties_wins.flush_ties(players_points, player, table_cards, indexOfScores)
-    elif bestScore == 7:
-        winners_circle= ties_wins.fullhouse_ties(players_points, player, table_cards, indexOfScores)
-    elif bestScore == 8:
-        winners_circle = ties_wins.four_ties(players_points, player, table_cards, indexOfScores)
-    elif bestScore == 9:
-        winners_circle = ties_wins.straight_flush_ties(players_points, player, table_cards, indexOfScores)
-    elif bestScore == 10:
-        sent = "Players "
-        for i in range(len(indexOfScores)):
-            winners_circle.append(indexOfScores[i])
-            sent = sent+ str(indexOfScores[i])
-            if i != len(indexOfScores)-1:
-                sent=sent+" and "
-        sent=sent + " tied!"
-        print(sent)
-    else:
-        winners_circle = ties_wins.high_tie(players_points, player, table_cards, indexOfScores)
         
           
 

@@ -1,7 +1,7 @@
 from Setup_deal import *
 import winner
 
-def pair_ties(players_points, player, table_cards, indexOfScores):
+def pair_ties(players_points, player, table_cards, indexOfScores, print_txt):
     #this will be the winners circle
     winners_circle = []
 #keys will be players and value will be the card with pair
@@ -34,7 +34,8 @@ def pair_ties(players_points, player, table_cards, indexOfScores):
     elif maxPair == 11: maxPair="Jack"
     elif maxPair == 14: maxPair="Ace"
     if len(playersOfHigh)==1:
-        print("Player "+str(playersOfHigh[0])+" wins with a high pair of "+str(maxPair))
+        if print_txt ==True:
+            print("Player "+str(playersOfHigh[0])+" wins with a high pair of "+str(maxPair))
         winners_circle.append(playersOfHigh[0])
         return winners_circle
     else:
@@ -84,12 +85,13 @@ def pair_ties(players_points, player, table_cards, indexOfScores):
                             #for us
                             y=y+1
             #if there is only one information card left, we know only one remains which means they have the high card
-            if len(information_card) == 1:
+            if len(information_card) == 1 :
                 if max_card == 13: max_card="King"
                 elif max_card == 12: max_card="Queen"
                 elif max_card == 11: max_card="Jack"
                 elif max_card == 14: max_card="Ace"
-                print("Player "+str(information_card[0][3]) + " wins with a pair of " +str(maxPair) +"s with kicker "+ str(max_card))
+                if print_txt ==True:
+                    print("Player "+str(information_card[0][3]) + " wins with a pair of " +str(maxPair) +"s with kicker "+ str(max_card))
                 winners_circle.append(information_card[0][3])
                 return winners_circle
         #this means information_card still remains with more than one player, which means it must have been a tie!
@@ -101,10 +103,11 @@ def pair_ties(players_points, player, table_cards, indexOfScores):
             if i != len(information_card)-1:
                 sent=sent+" and "
         sent=sent + " tied!"
-        print(sent)
+        if print_txt ==True:
+            print(sent)
         return winners_circle
 
-def two_pair_tie(players_points, player, table_cards, indexOfScores):
+def two_pair_tie(players_points, player, table_cards, indexOfScores, print_txt):
     #this will be the winners circle
     winners_circle = []
     #keys will be players and value will be the card with first pair
@@ -138,7 +141,8 @@ def two_pair_tie(players_points, player, table_cards, indexOfScores):
     #if there is only one player in playersOfhigh, this means a single player has the max pair, which 
     #means they have the strongest hand
     if len(playersOfHigh)==1:
-        print("Player "+str(playersOfHigh[0])+" wins with a high pair of "+str(maxPair1)+"s")
+        if print_txt ==True:
+            print("Player "+str(playersOfHigh[0])+" wins with a high pair of "+str(maxPair1)+"s")
         winners_circle.append(playersOfHigh[0])
         return winners_circle
     else:
@@ -161,7 +165,8 @@ def two_pair_tie(players_points, player, table_cards, indexOfScores):
             elif maxPair2 == 12: maxPair2="Queen"
             elif maxPair2 == 11: maxPair2="Jack"
             elif maxPair2 == 14: maxPair2="Ace"
-            print("Player "+str(playersOfHigh2[0])+" wins with a high pair of "+str(maxPair2))
+            if print_txt ==True:
+                print("Player "+str(playersOfHigh2[0])+" wins with a high pair of "+str(maxPair2))
             winners_circle.append(playersOfHigh2[0])
             return winners_circle
         else:
@@ -191,7 +196,8 @@ def two_pair_tie(players_points, player, table_cards, indexOfScores):
                 elif high_card == 12: high_card="Queen"
                 elif high_card == 11: high_card="Jack"
                 elif high_card == 14: high_card="Ace"
-                print("Player "+str(player_info[0][3])+" wins with a high card of "+str(high_card))
+                if print_txt ==True:
+                    print("Player "+str(player_info[0][3])+" wins with a high card of "+str(high_card))
                 winners_circle.append(player_info[0][3])
                 return winners_circle
             else:
@@ -204,11 +210,12 @@ def two_pair_tie(players_points, player, table_cards, indexOfScores):
                     if i != len(player_info)-1:
                         sent=sent+" and "
                 sent=sent + " tied!"
-                print(sent)
+                if print_txt ==True:
+                    print(sent)
                 return winners_circle
 
 
-def three_tie(players_points, player, table_cards, indexOfScores):
+def three_tie(players_points, player, table_cards, indexOfScores, print_txt):
     #this will be the winners circle
     winners_circle = []
     #keys will be players and value will be the card with three of a kind
@@ -237,7 +244,8 @@ def three_tie(players_points, player, table_cards, indexOfScores):
     #if there is only one player in playersOfhigh, this means a single player has the max three, which 
     #means they have the strongest hand
     if len(playersOfHigh)==1:
-        print("Player "+str(playersOfHigh[0])+" wins with a higher three of kind "+str(maxThree))
+        if print_txt ==True:
+            print("Player "+str(playersOfHigh[0])+" wins with a higher three of kind "+str(maxThree))
         winners_circle.append(playersOfHigh[0])
         return winners_circle
     else:
@@ -269,7 +277,8 @@ def three_tie(players_points, player, table_cards, indexOfScores):
             elif high_card == 12: high_card="Queen"
             elif high_card == 11: high_card="Jack"
             elif high_card == 14: high_card="Ace"
-            print("Player "+str(player_info[0][3])+" wins with a high card of "+str(high_card))
+            if print_txt ==True:
+                print("Player "+str(player_info[0][3])+" wins with a high card of "+str(high_card))
             winners_circle.append(player_info[0][3])
             return winners_circle
         
@@ -287,7 +296,8 @@ def three_tie(players_points, player, table_cards, indexOfScores):
             elif high_card2 == 12: high_card2="Queen"
             elif high_card2 == 11: high_card2="Jack"
             elif high_card2 == 14: high_card2="Ace"
-            print("Player "+str(player_info[0][3])+" wins with a second high card of "+str(high_card2))
+            if print_txt ==True:
+                print("Player "+str(player_info[0][3])+" wins with a second high card of "+str(high_card2))
             winners_circle.append(player_info[0][3])
             return winners_circle
         
@@ -301,11 +311,12 @@ def three_tie(players_points, player, table_cards, indexOfScores):
                 if i != len(player_info)-1:
                     sent=sent+" and "
             sent=sent + " tied!"
-            print(sent)
+            if print_txt ==True:
+                print(sent)
             return winners_circle
 
 
-def straight_ties(players_points, player, table_cards, indexOfScores):
+def straight_ties(players_points, player, table_cards, indexOfScores, print_txt):
     winners_circle = []
     info= []
     high_straight = 0
@@ -330,7 +341,8 @@ def straight_ties(players_points, player, table_cards, indexOfScores):
         elif high_straight == 12: high_straight="Queen"
         elif high_straight == 11: high_straight="Jack"
         elif high_straight == 14: high_straight="Ace"
-        print("Player "+str(info[0][2])+" wins with a higher straight of "+str(high_straight))
+        if print_txt ==True:
+            print("Player "+str(info[0][2])+" wins with a higher straight of "+str(high_straight))
         winners_circle.append(info[0][2])
         return winners_circle
     else:
@@ -343,11 +355,12 @@ def straight_ties(players_points, player, table_cards, indexOfScores):
             if i != len(info)-1:
                 sent=sent+" and "
         sent=sent + " tied!"
-        print(sent)
+        if print_txt ==True:
+            print(sent)
         return winners_circle
 
 
-def flush_ties(players_points, player, table_cards, indexOfScores):
+def flush_ties(players_points, player, table_cards, indexOfScores, print_txt):
     winners_circle = []
     info = []
     #puts all flush information of players into a list called info
@@ -355,7 +368,6 @@ def flush_ties(players_points, player, table_cards, indexOfScores):
         flush_indicator = winner.flush(table_cards, player[indexOfScores[i]])
         flush_indicator.append(indexOfScores[i])
         info.append(flush_indicator)
-    print(info)
     #for each card of the flush, and for each player, compare the ith high card of the flush
     #from player to player, and whoever has the highest flush card does not get removed
     #we keep iterating to the next ith card if two players have the high card. 
@@ -381,7 +393,8 @@ def flush_ties(players_points, player, table_cards, indexOfScores):
             if i != len(info)-1:
                 sent=sent+" and "
         sent=sent + " tied!"
-        print(sent)
+        if print_txt ==True:
+            print(sent)
         return winners_circle
     #quantify face card and return the max high flush
     else:
@@ -389,13 +402,13 @@ def flush_ties(players_points, player, table_cards, indexOfScores):
         elif max == 12: max="Queen"
         elif max== 11: max="Jack"
         elif max == 14: max="Ace"
-        print("Player "+str(info[0][2])+" wins with a higher flush of "+str(max))
+        if print_txt ==True:
+            print("Player "+str(info[0][2])+" wins with a higher flush of "+str(max))
         winners_circle.append(info[0][2])
-        print(winners_circle)
         return winners_circle
 
 
-def fullhouse_ties(players_points, player, table_cards, indexOfScores):
+def fullhouse_ties(players_points, player, table_cards, indexOfScores, print_txt):
     #0th index is three of a kind, first is the pair. If there are two three of a kinds, 
     #take the higher three of a kind as the 0th index, and the lower three of a kind as 
     #the 1st index
@@ -446,9 +459,10 @@ def fullhouse_ties(players_points, player, table_cards, indexOfScores):
         elif info[0][0] == 12: info[0][0]="Queen"
         elif info[0][0] == 11: info[0][0]="Jack"
         elif info[0][0] == 14: info[0][0]="Ace"
-        print("Player "+str(info[0][2])+" wins with a full house with a higher three of a kind of "+str(info[0][0]))
+        if print_txt ==True:
+            print("Player "+str(info[0][2])+" wins with a full house with a higher three of a kind of "+str(info[0][0]))
         winners_circle.append(info[0][2])
-        print(winners_circle)
+        #print(winners_circle)
         return winners_circle
     #if two people have the same high three of a kind, compare the pairs
     else:
@@ -470,9 +484,10 @@ def fullhouse_ties(players_points, player, table_cards, indexOfScores):
         elif info[0][1] == 12: info[0][1]="Queen"
         elif info[0][1] == 11: info[0][1]="Jack"
         elif info[0][1] == 14: info[0][1]="Ace"
-        print("Player "+str(info[0][2])+" wins with a full house with a higher pair of "+str(info[0][1]))
+        if print_txt ==True:
+            print("Player "+str(info[0][2])+" wins with a full house with a higher pair of "+str(info[0][1]))
         winners_circle.append(info[0][2])
-        print(winners_circle)
+        #print(winners_circle)
         return winners_circle
     #else its a tie so return all tied folks!
     else:
@@ -484,9 +499,10 @@ def fullhouse_ties(players_points, player, table_cards, indexOfScores):
                 if i != len(info)-1:
                     sent=sent+" and "
             sent=sent + " tied!"
-            print(sent)
+            if print_txt ==True:
+                print(sent)
             return winners_circle
-def four_ties(players_points, player, table_cards, indexOfScores):
+def four_ties(players_points, player, table_cards, indexOfScores, print_txt):
     #first element contains high card
     #second element contains player
     info = []
@@ -510,9 +526,10 @@ def four_ties(players_points, player, table_cards, indexOfScores):
         elif info[0][0] == 12: info[0][0]="Queen"
         elif info[0][0] == 11: info[0][0]="Jack"
         elif info[0][0] == 14: info[0][0]="Ace"
-        print("Player "+str(info[0][1])+" wins with a four of a kind with a high card of "+str(info[0][0]))
+        if print_txt ==True:
+            print("Player "+str(info[0][1])+" wins with a four of a kind with a high card of "+str(info[0][0]))
         winners_circle.append(info[0][1])
-        print(winners_circle)
+        #print(winners_circle)
         return winners_circle
     #else there are more than one player with the max high card so its a tie
     else:
@@ -523,10 +540,11 @@ def four_ties(players_points, player, table_cards, indexOfScores):
             if i != len(info)-1:
                 sent=sent+" and "
         sent=sent + " tied!"
-        print(sent)
+        if print_txt ==True:
+            print(sent)
         return winners_circle
 
-def straight_flush_ties(players_points, player, table_cards, indexOfScores):
+def straight_flush_ties(players_points, player, table_cards, indexOfScores, print_txt):
     info = []
     max_high=0
     winners_circle= []
@@ -560,9 +578,10 @@ def straight_flush_ties(players_points, player, table_cards, indexOfScores):
         elif info[0][0] == 12: info[0][0]="Queen"
         elif info[0][0] == 11: info[0][0]="Jack"
         elif info[0][0] == 14: info[0][0]="Ace"
-        print("Player "+str(info[0][1])+" wins with a straight flush with a high card of "+str(info[0][0]))
+        if print_txt ==True:
+            print("Player "+str(info[0][1])+" wins with a straight flush with a high card of "+str(info[0][0]))
         winners_circle.append(info[0][1])
-        print(winners_circle)
+        #print(winners_circle)
         return winners_circle
     #else there are more than one player with the max high card so its a tie
     else:
@@ -573,10 +592,11 @@ def straight_flush_ties(players_points, player, table_cards, indexOfScores):
             if i != len(info)-1:
                 sent=sent+" and "
         sent=sent + " tied!"
-        print(sent)
+        if print_txt ==True:
+            print(sent)
         return winners_circle
 
-def high_tie(players_points, player, table_cards, indexOfScores):
+def high_tie(players_points, player, table_cards, indexOfScores, print_txt):
     #first index is a list, and the first index of the list is a list of high cards,
     #and the second index is the player
     info = []
@@ -611,9 +631,9 @@ def high_tie(players_points, player, table_cards, indexOfScores):
         elif max1 == 12: max1="Queen"
         elif max1 == 11: max1="Jack"
         elif max1 == 14: max1="Ace"
-        print("Player "+str(info[0][1])+" wins with a high card of "+str(max1))
+        if print_txt ==True:
+            print("Player "+str(info[0][1])+" wins with a high card of "+str(max1))
         winners_circle.append(info[0][1])
-        print(winners_circle)
         return winners_circle
         
 
@@ -625,7 +645,8 @@ def high_tie(players_points, player, table_cards, indexOfScores):
             if i != len(info)-1:
                 sent=sent+" and "
         sent=sent + " tied!"
-        print(sent)
+        if print_txt ==True:
+            print(sent)
         return winners_circle
 
 
