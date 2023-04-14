@@ -32,23 +32,28 @@ class Poker:
                 card_num=1 #reset card number
         
 
-    def deal_cards(self):
+    def deal_cards(self, no_deal):
+
+        #no deal is gonna be the player not to deal out
+
         for i in range (1, self.player_count+1): #go through players and append 1st card
-            ran_num = random.choice(self.list) #random generate a number from 0-51
-            while ran_num == -1: #if the random number is -1, card not valid
-                ran_num = random.choice(self.list) #choose a random number until its valid
-            self.list[ran_num] = -1 #set element ran_num to -1 to set invalid state
-            self.player[i].append(self.deck[ran_num]) #append the card from deck to player
-            self.deck.pop(ran_num) #pop ran_num key value because card already used
+            if i != no_deal:
+                ran_num = random.choice(self.list) #random generate a number from 0-51
+                while ran_num == -1: #if the random number is -1, card not valid
+                    ran_num = random.choice(self.list) #choose a random number until its valid
+                self.list[ran_num] = -1 #set element ran_num to -1 to set invalid state
+                self.player[i].append(self.deck[ran_num]) #append the card from deck to player
+                self.deck.pop(ran_num) #pop ran_num key value because card already used
 
         #do it one more time so that each player has two cards
         for i in range (1, self.player_count+1):
-            ran_num = random.choice(self.list)
-            while ran_num == -1:
+            if i != no_deal:
                 ran_num = random.choice(self.list)
-            self.list[ran_num] = -1
-            self.player[i].append(self.deck[ran_num])
-            self.deck.pop(ran_num)
+                while ran_num == -1:
+                    ran_num = random.choice(self.list)
+                self.list[ran_num] = -1
+                self.player[i].append(self.deck[ran_num])
+                self.deck.pop(ran_num)
         
     def deal_flop(self):
         for i in range(3):
@@ -143,6 +148,29 @@ class Poker:
         self.list[base+numeric] = -1
         self.table_cards.append(self.deck[base+numeric])
         self.deck.pop(base+numeric)
+
+
+
+
+    def add_hand(self, hand, player):
+        for i in range(2):
+            #find index of added card
+            if hand[i][1]=="Heart": base = 0
+            elif hand[i][1]=="Diamond": base = 13
+            elif hand[i][1]=="Spade": base = 26
+            elif hand[i][1]=="Clove": base = 39
+            if type(hand[i][0]) == int: numeric = hand[i][0]-1
+            if hand[i][0]=="King": numeric = 12
+            elif hand[i][0]=="Queen": numeric = 11
+            elif hand[i][0]=="Jack": numeric = 10
+            elif hand[i][0]=="Ace":numeric = 0
+            #card is used so card is now invalid
+            self.list[base+numeric] = -1
+            #append hand to user
+            self.player[player].append(hand[i])
+            #get rid of it from deck
+            self.deck.pop(base+numeric)
+
 
 
 #x = Poker(4)

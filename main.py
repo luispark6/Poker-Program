@@ -17,7 +17,47 @@ def main():
             print("Please input an integer in the range of 2-6 ")
 
     round1 = Poker(num_player) #basic initialization of cards, players, etc. 
-    round1.deal_cards() #deals the cards to all the players in the game
+
+
+    #this simply takes in valid inputs of cards for user
+    choose_card = input("Would you like to pick your cards? y/n: ")
+    while choose_card != 'y' and choose_card != "n":
+        choose_card = input("Please input 'y' or 'n': ")
+    if choose_card == 'y':
+        hand = []
+        number_cards = ["2","3","4","5","6","7","8","9","10"]
+        face_card = ["Jack", "King", "Queen", "Ace"]
+        suit = ["Heart", "Club", "Diamond", "Spade"]
+        first_card_value = input("Value of first card: ")
+        while first_card_value not in number_cards and first_card_value not in face_card:
+            first_card_value = input("Please pick a value 2-10 or a valid Face card: ")
+        if first_card_value in number_cards:
+            first_card_value = int(first_card_value)
+        first_card_suit = input("Suit of first card: ")
+        while first_card_suit not in suit:
+            first_card_suit = input("Please pick a valid suit. [Heart, Club, Spade, Diamond]: ")
+        second_card_value = input("Value of second card: ")
+        while second_card_value not in number_cards and second_card_value not in face_card:
+            second_card_value = input("Please pick a value 2-10 or a valid Face card: ")
+        if second_card_value in number_cards:
+            second_card_value = int(second_card_value)
+        second_card_suit = input("Suit of second card: ")
+        while second_card_suit not in suit:
+            second_card_suit = input("Please pick a valid suit. [Heart, Club, Spade, Diamond]: ")
+        if second_card_value == first_card_value and second_card_suit == first_card_suit:
+            print("Card is already being used! Pick another card.")
+            second_card_value = input("Value of second card: ")
+            while second_card_value not in number_cards and second_card_value not in face_card:
+                second_card_value = input("Please pick a value 2-10 or a valid Face card: ")
+            if second_card_value in number_cards:
+                second_card_value = int(second_card_value)
+            second_card_suit = input("Suit of second card: ")
+            while second_card_suit not in suit:
+                second_card_suit = input("Please pick a valid suit. [Heart, Club, Spade, Diamond]: ")
+        hand.append([first_card_value, first_card_suit])
+        hand.append([second_card_value, second_card_suit])
+        round1.add_hand(hand, 1)
+        round1.deal_cards(1) #deals the cards to all the players but first in the game
 
     #display users cards in terminal
     print("Your cards are: "+ str(round1.player[1][0][0])+" of "+str(round1.player[1][0][1])+\
