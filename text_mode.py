@@ -8,7 +8,7 @@ def text_mode():
     while True:
         try: #used so to take a valid input from user
             num_player = int(input(("Please select the amount of players you want play with: ")))
-            if num_player<2 or num_player>6: #throw on purpose if num_player not in range 2-6
+            if num_player<2 or num_player>7: #throw on purpose if num_player not in range 2-6
                 x='s'
                 y=int(x)
             break #breaks if valid int is inputted

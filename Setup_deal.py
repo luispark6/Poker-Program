@@ -149,9 +149,6 @@ class Poker:
         self.table_cards.append(self.deck[base+numeric])
         self.deck.pop(base+numeric)
 
-
-
-
     def add_hand(self, hand, player):
         for i in range(2):
             #find index of added card
@@ -173,13 +170,3 @@ class Poker:
 
 
 
-#x = Poker(4)
-#print(x.deck)
-#x.deal_cards()
-#print(x.player)
-#print(x.deck)
-#x.deal_flop()
-#print(x.table_cards)
-#x.deal_turn()
-#x.deal_turn()
-#print(x.table_cards)
