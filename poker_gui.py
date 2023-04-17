@@ -140,20 +140,22 @@ def main():
     for filename in os.listdir(directory):
         f = os.path.join(directory, filename)
         unsorted_cards.append(f)
-    #intiailzing sorted_cards. This will append the png files from Ace-King
+    #intiailzing sorted_cards. This will append the png files from Ace-King in image form for pygame
     sorted_cards=[]
+    #this will be used later to indicate which card has been chosen
+    listOfcards = []
     #value cards go in ascending order, so we append to sorted_cards from smallest to biggest
     #font and surf for the add_card
     font = pygame.font.SysFont('Arial', 15, bold = True)
     surf = font.render('', True, 'white')
-    
     for i in range(len(value_cards)):
         for j in range(len(unsorted_cards)):
             if value_cards[i] in unsorted_cards[j]:
                 sorted_cards.append(pygame.image.load(unsorted_cards[j]))
+                listOfcards.append(unsorted_cards[j])
     #returns a dictionaries of all things needed to make a add player button
     player = addplayer()
-
+    
     #add_card will contain all available add card buttons. We are intiliazing in 
     #the line below
     add_card = init_addcard()
@@ -190,6 +192,19 @@ def main():
                         add_card[player_num2] = [font, surf, list[1]]
                         #we add this into a list called remove because these are all keys that we want to remvoe from player
                         remove.append(i)
+
+                #finds the indice of the card picked when the cards are popped up. indice should range from 0,0 - 10,3
+                #anything else is not valid
+                if event.type == pygame.MOUSEBUTTONDOWN and show_cards == True:
+                    pos = pygame.mouse.get_pos()
+                    indiceX = (pos[0]-180)//60
+                    indiceY = (pos[1]-200)//90
+                    #if the indices youve chosen is an indice where a card is located, then go in this if statement
+                    #it should display the card for the proper player, get rid of the button option for card, and get rid
+                    #of the card from the display
+                    if indiceX >= 0 and indiceX<11 and indiceY >=0 and indiceY<4:
+                        print("hi")
+                    
                 #we draw a rectangle that will represent the player and then we remove it from player because we don't need
                 #the add player button anymore because we just added player
                 if show_cards ==False:
@@ -204,6 +219,7 @@ def main():
                             if add_card[i][2].collidepoint(event.pos):
                                 show_cards =True
                                 card_player.append(i)
+                
                            
 
         a,b = pygame.mouse.get_pos()
