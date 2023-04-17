@@ -164,7 +164,10 @@ def main():
     show_cards=False
     #this will contain the player in which the user picks the card for
     card_player =[]
+    remove = []
     while running:    #checks each event and see if it should quit
+        screen.fill([0,128,0])
+        rect(screen)
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if (event.key == pygame.K_ESCAPE):
@@ -172,7 +175,6 @@ def main():
             elif (event.type == pygame.QUIT):
                 return
             if event.type == pygame.MOUSEBUTTONDOWN:
-                remove = []
                 #iterate through each add player button if we press down on the mouse
                 for i in player:
                     #if we pressed down on the mouse and it happens to colllide with one of the players, 
@@ -199,14 +201,20 @@ def main():
                     pos = pygame.mouse.get_pos()
                     indiceX = (pos[0]-180)//60
                     indiceY = (pos[1]-200)//90
+                    
                     #if the indices youve chosen is an indice where a card is located, then go in this if statement
                     #it should display the card for the proper player, get rid of the button option for card, and get rid
                     #of the card from the display
-                    if indiceX >= 0 and indiceX<11 and indiceY >=0 and indiceY<4:
-                        print("hi")
+                    if indiceX >= 0 and indiceX<14 and indiceY >=0 and indiceY<4:
+                        #finds the one dimenesional indice for the card
+                        base = indiceY*13
+                        indice = base + indiceX +indiceY
+                        sorted_cards.pop(indice)
+                        show_cards = False
+                         
                     
-                #we draw a rectangle that will represent the player and then we remove it from player because we don't need
-                #the add player button anymore because we just added player
+                #remove contains all player add buttons that have been clicked. We dont need these buttons
+                #anymore because we just clicked them
                 if show_cards ==False:
                     for i in remove:
                         surf2 = font.render('     Player '+str(add_player_num), True, 'white')
@@ -214,13 +222,13 @@ def main():
                         screen.blit(surf2,(player[i][2].x, player[i][2].y))
                         player.pop(i)
                     #if we click a add_card button, turn show_cards to true and append the key
-                    for i in add_card:
-                        if event.type == pygame.MOUSEBUTTONDOWN:
+                    #card player
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        for i in add_card:
                             if add_card[i][2].collidepoint(event.pos):
                                 show_cards =True
                                 card_player.append(i)
-                
-                           
+                                
 
         a,b = pygame.mouse.get_pos()
         #loops through player which is information for each button, and if mouse is on top of any 
@@ -235,7 +243,7 @@ def main():
             for i in player:
                 screen.blit(player[i][1],(player[i][2].x, player[i][2].y))
             #displays face down card
-            screen.blit(pygame.transform.scale(sorted_cards[52], (90, 115)), (270, 330))
+            #screen.blit(pygame.transform.scale(sorted_cards[52], (90, 115)), (270, 330))
 
             #for each add_card button, if cursor is over it, highlight it 
             for i in add_card:
@@ -244,7 +252,7 @@ def main():
                 else:
                     pygame.draw.rect(screen, (0,128,0), add_card[i][2])
                 screen.blit(add_card[i][1],(add_card[i][2].x, add_card[i][2].y))
-
+            
 
         #if true, display the cards
         if show_cards == True:
@@ -259,6 +267,6 @@ def main():
                     x=180
 
             #IMPLEMENT A WAY SO THAT WHEN USER CLICKS ON A CARD, IT PICKS THE CARD AND PUTS IT IN HIS HAND
-                
+        
         pygame.display.update()
 main()
