@@ -159,6 +159,9 @@ def main():
     add_card = init_addcard()
     #this will be used to indicate which number player has been added
     add_player_num = 1
+    show_cards=False
+    #this will contain the player in which the user picks the card for
+    card_player =[]
     while running:    #checks each event and see if it should quit
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
@@ -172,7 +175,7 @@ def main():
                 for i in player:
                     #if we pressed down on the mouse and it happens to colllide with one of the players, 
                     #go in the if statement
-                    if player[i][2].collidepoint(event.pos):
+                    if player[i][2].collidepoint(event.pos) and show_cards==False:
                         #update the player number
                         add_player_num = add_player_num +1
                         #these are the keys of each player and their cards
@@ -189,37 +192,57 @@ def main():
                         remove.append(i)
                 #we draw a rectangle that will represent the player and then we remove it from player because we don't need
                 #the add player button anymore because we just added player
-                for i in remove:
-                    surf2 = font.render('     Player '+str(add_player_num), True, 'white')
-                    pygame.draw.rect(screen, [0, 128, 0], player[i][2]) 
-                    screen.blit(surf2,(player[i][2].x, player[i][2].y))
-                    player.pop(i)
+                if show_cards ==False:
+                    for i in remove:
+                        surf2 = font.render('     Player '+str(add_player_num), True, 'white')
+                        pygame.draw.rect(screen, [0, 128, 0], player[i][2]) 
+                        screen.blit(surf2,(player[i][2].x, player[i][2].y))
+                        player.pop(i)
+                    #if we click a add_card button, turn show_cards to true and append the key
+                    for i in add_card:
+                        if event.type == pygame.MOUSEBUTTONDOWN:
+                            if add_card[i][2].collidepoint(event.pos):
+                                show_cards =True
+                                card_player.append(i)
+                           
 
-
-                        
         a,b = pygame.mouse.get_pos()
         #loops through player which is information for each button, and if mouse is on top of any 
         #of the add player buttons, highlight
-        for i in player:
-            if player[i][2].x<= a <player[i][2].x+94 and player[i][2].y <= b <= player[i][2].y+20:
-                pygame.draw.rect(screen, (180, 180, 180), player[i][2])
-            else:
-                pygame.draw.rect(screen, (0,128,0), player[i][2])
-        #loops over players and displays all the buttons
-        for i in player:
-            screen.blit(player[i][1],(player[i][2].x, player[i][2].y))
-        #displays face down card
-        screen.blit(pygame.transform.scale(sorted_cards[52], (90, 115)), (270, 330))
+        if show_cards == False:
+            for i in player:
+                if player[i][2].x<= a <player[i][2].x+94 and player[i][2].y <= b <= player[i][2].y+20:
+                    pygame.draw.rect(screen, (180, 180, 180), player[i][2])
+                else:
+                    pygame.draw.rect(screen, (0,128,0), player[i][2])
+            #loops over players and displays all the buttons
+            for i in player:
+                screen.blit(player[i][1],(player[i][2].x, player[i][2].y))
+            #displays face down card
+            screen.blit(pygame.transform.scale(sorted_cards[52], (90, 115)), (270, 330))
 
-        #for each add_card button, if cursor is over it, highlight it 
-        for i in add_card:
-            if add_card[i][2].x<= a <add_card[i][2].x+90 and add_card[i][2].y <= b <= add_card[i][2].y+115:
-                pygame.draw.rect(screen, (180, 180, 180), add_card[i][2])
-            else:
-                pygame.draw.rect(screen, (0,128,0), add_card[i][2])
-            screen.blit(add_card[i][1],(add_card[i][2].x, add_card[i][2].y))
+            #for each add_card button, if cursor is over it, highlight it 
+            for i in add_card:
+                if add_card[i][2].x<= a <add_card[i][2].x+90 and add_card[i][2].y <= b <= add_card[i][2].y+115:
+                    pygame.draw.rect(screen, (180, 180, 180), add_card[i][2])
+                else:
+                    pygame.draw.rect(screen, (0,128,0), add_card[i][2])
+                screen.blit(add_card[i][1],(add_card[i][2].x, add_card[i][2].y))
 
-        
 
+        #if true, display the cards
+        if show_cards == True:
+            pygame.draw.rect(screen, (0,128,0), add_card[card_player[0]][2])
+            x=180
+            y=200
+            for i in range(len(sorted_cards)):
+                screen.blit(pygame.transform.scale(sorted_cards[i], (60, 90)), (x, y))
+                x=x+60
+                if i ==13 or i == 27 or i == 41:
+                    y=y+90
+                    x=180
+
+            #IMPLEMENT A WAY SO THAT WHEN USER CLICKS ON A CARD, IT PICKS THE CARD AND PUTS IT IN HIS HAND
+                
         pygame.display.update()
 main()
