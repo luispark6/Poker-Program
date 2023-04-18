@@ -56,13 +56,13 @@ def addplayer():
     addplayer5 = pygame.Rect(907, 710, 94, 20)
     addplayer6 = pygame.Rect(1055, 477, 94, 20)
     addplayer7 = pygame.Rect(907, 235, 94, 20)
-    player["player1"]= [font, surf, addplayer1]
-    player["player2"] = [font, surf, addplayer2]
-    player["player3"] = [font, surf, addplayer3]
+    player["player2"]= [font, surf, addplayer1]
+    player["player3"] = [font, surf, addplayer2]
+    player["player5"] = [font, surf, addplayer3]
     player["player4"] = [font, surf, addplayer4]
-    player["player5"] = [font, surf, addplayer5]
-    player["player6"] = [font, surf, addplayer6]
-    player["player7"] = [font, surf, addplayer7]
+    player["player8"] = [font, surf, addplayer5]
+    player["player7"] = [font, surf, addplayer6]
+    player["player6"] = [font, surf, addplayer7]
     return player
 
 def init_addcard():
@@ -165,6 +165,8 @@ def main():
     #this will contain the player in which the user picks the card for
     card_player =[]
     remove = []
+    temp = []
+    removal=0
     while running:    #checks each event and see if it should quit
         screen.fill([0,128,0])
         rect(screen)
@@ -211,16 +213,15 @@ def main():
                         indice = base + indiceX +indiceY
                         sorted_cards.pop(indice)
                         show_cards = False
-                         
-                    
+
                 #remove contains all player add buttons that have been clicked. We dont need these buttons
                 #anymore because we just clicked them
-                if show_cards ==False:
+                elif show_cards ==False:
                     for i in remove:
-                        surf2 = font.render('     Player '+str(add_player_num), True, 'white')
-                        pygame.draw.rect(screen, [0, 128, 0], player[i][2]) 
-                        screen.blit(surf2,(player[i][2].x, player[i][2].y))
+                        #i[2] contains player numbers
+                        temp.append([player[i][2], add_player_num])
                         player.pop(i)
+                        remove=[]
                     #if we click a add_card button, turn show_cards to true and append the key
                     #card player
                     if event.type == pygame.MOUSEBUTTONDOWN:
@@ -228,6 +229,8 @@ def main():
                             if add_card[i][2].collidepoint(event.pos):
                                 show_cards =True
                                 card_player.append(i)
+                                removal = i
+                                removal2 = add_card[i][2]
                                 
 
         a,b = pygame.mouse.get_pos()
@@ -252,11 +255,13 @@ def main():
                 else:
                     pygame.draw.rect(screen, (0,128,0), add_card[i][2])
                 screen.blit(add_card[i][1],(add_card[i][2].x, add_card[i][2].y))
-            
-
+            #displays all the player numbers that have been added
+            for i in temp:
+                surf2 = font.render('     Player '+str(i[1]), True, 'white')
+                screen.blit(surf2,(i[0].x, i[0].y))
         #if true, display the cards
         if show_cards == True:
-            pygame.draw.rect(screen, (0,128,0), add_card[card_player[0]][2])
+            pygame.draw.rect(screen, (0,128,0), removal2)
             x=180
             y=200
             for i in range(len(sorted_cards)):
@@ -265,6 +270,9 @@ def main():
                 if i ==13 or i == 27 or i == 41:
                     y=y+90
                     x=180
+            if removal !=0:
+                add_card.pop(removal)
+            removal=0
 
             #IMPLEMENT A WAY SO THAT WHEN USER CLICKS ON A CARD, IT PICKS THE CARD AND PUTS IT IN HIS HAND
         
