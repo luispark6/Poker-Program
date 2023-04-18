@@ -148,6 +148,9 @@ def main():
     #font and surf for the add_card
     font = pygame.font.SysFont('Arial', 15, bold = True)
     surf = font.render('', True, 'white')
+
+    font2 = pygame.font.SysFont('Arial', 18, bold = True)
+    begin_game_text = font.render('Please add players before starting the hand', True, 'white')
     for i in range(len(value_cards)):
         for j in range(len(unsorted_cards)):
             if value_cards[i] in unsorted_cards[j]:
@@ -257,7 +260,6 @@ def main():
                 screen.blit(player[i][1],(player[i][2].x, player[i][2].y))
             #displays face down card
             screen.blit(pygame.transform.scale(blank_card, (90, 115)), (270, 330))
-
             #for each add_card button, if cursor is over it, highlight it 
             for i in add_card:
                 if add_card[i][2].x<= a <add_card[i][2].x+90 and add_card[i][2].y <= b <= add_card[i][2].y+115:
@@ -288,8 +290,30 @@ def main():
             if removal !=0:
                 add_card.pop(removal)
             removal=0
-
         
+        begin_game_text = font2.render('Please add players before starting the hand', True, 'white')
+        screen.blit(begin_game_text,(400, 280))
+
+        begin_text = font2.render('Play Hand!', True, 'white')
+        begin_button = pygame.Rect(400, 450, 80, 105)
+
+
+
+
+        screen.blit(begin_text,(begin_button.x, begin_button.y))
+
+        if begin_button.x<= a <begin_button.x+80 and begin_button.y <= b <= begin_button.y+105:
+            print('heep')
+            pygame.draw.rect(begin_text, (180, 180, 180), begin_button)
+        else:
+            print('jo')
+            pygame.draw.rect(begin_text, (0,128,0), begin_button)
+
+
+
 
         pygame.display.update()
+
+
+
 main()
