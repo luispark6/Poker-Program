@@ -155,7 +155,7 @@ def main():
                 listOfcards.append(unsorted_cards[j])
     #returns a dictionaries of all things needed to make a add player button
     player = addplayer()
-    
+    blank_card = sorted_cards[52]
     #add_card will contain all available add card buttons. We are intiliazing in 
     #the line below
     add_card = init_addcard()
@@ -164,9 +164,13 @@ def main():
     show_cards=False
     #this will contain the player in which the user picks the card for
     card_player =[]
+    #list of all chosen cards
+    all_chosen_cards = []
     remove = []
     temp = []
     removal=0
+    chosen_card = []
+    chosen_card2=[]
     while running:    #checks each event and see if it should quit
         screen.fill([0,128,0])
         rect(screen)
@@ -196,7 +200,6 @@ def main():
                         add_card[player_num2] = [font, surf, list[1]]
                         #we add this into a list called remove because these are all keys that we want to remvoe from player
                         remove.append(i)
-
                 #finds the indice of the card picked when the cards are popped up. indice should range from 0,0 - 10,3
                 #anything else is not valid
                 if event.type == pygame.MOUSEBUTTONDOWN and show_cards == True:
@@ -211,8 +214,13 @@ def main():
                         #finds the one dimenesional indice for the card
                         base = indiceY*13
                         indice = base + indiceX +indiceY
-                        sorted_cards.pop(indice)
+                        one_card = sorted_cards.pop(indice)
+                        all_chosen_cards.append(one_card)
+                        card_removed= listOfcards.pop(indice)
                         show_cards = False
+                        chosen_card.append(removal3)
+                        chosen_card2.append(removal2)
+                        print(chosen_card2)               
 
                 #remove contains all player add buttons that have been clicked. We dont need these buttons
                 #anymore because we just clicked them
@@ -231,6 +239,8 @@ def main():
                                 card_player.append(i)
                                 removal = i
                                 removal2 = add_card[i][2]
+                                removal3 = add_card[i][1]
+                                
                                 
 
         a,b = pygame.mouse.get_pos()
@@ -246,7 +256,7 @@ def main():
             for i in player:
                 screen.blit(player[i][1],(player[i][2].x, player[i][2].y))
             #displays face down card
-            #screen.blit(pygame.transform.scale(sorted_cards[52], (90, 115)), (270, 330))
+            screen.blit(pygame.transform.scale(blank_card, (90, 115)), (270, 330))
 
             #for each add_card button, if cursor is over it, highlight it 
             for i in add_card:
@@ -259,6 +269,11 @@ def main():
             for i in temp:
                 surf2 = font.render('     Player '+str(i[1]), True, 'white')
                 screen.blit(surf2,(i[0].x, i[0].y))
+
+        #display chosen cards
+        for i in range(len(chosen_card)):
+            screen.blit(pygame.transform.scale(all_chosen_cards[i], (80,105)), (chosen_card2[i].x, chosen_card2[i].y))
+            
         #if true, display the cards
         if show_cards == True:
             pygame.draw.rect(screen, (0,128,0), removal2)
@@ -274,7 +289,7 @@ def main():
                 add_card.pop(removal)
             removal=0
 
-            #IMPLEMENT A WAY SO THAT WHEN USER CLICKS ON A CARD, IT PICKS THE CARD AND PUTS IT IN HIS HAND
         
+
         pygame.display.update()
 main()
