@@ -132,6 +132,8 @@ def main():
     #displays green background
     screen.fill([0,128,0])
     running = True
+    #indicator that checks if a slot has been chosen
+    slot_chosen = False
     #unsorted cards will be the png files in unsorted order
     unsorted_cards = []
     #this will iterate through the file and append the file names in unsorted_cards
@@ -191,12 +193,12 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if begin_button.collidepoint(event.pos) and add_player_num!=1:
                     play_hand=True
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONDOWN and show_cards==False and play_hand==False:
                 #iterate through each add player button if we press down on the mouse
                 for i in player:
                     #if we pressed down on the mouse and it happens to colllide with one of the players, 
                     #go in the if statement
-                    if player[i][2].collidepoint(event.pos) and show_cards==False and play_hand==False:
+                    if player[i][2].collidepoint(event.pos):
                         #update the player number
                         add_player_num = add_player_num +1
                         #these are the keys of each player and their cards
@@ -211,48 +213,61 @@ def main():
                         add_card[player_num2] = [font, surf, list[1]]
                         #we add this into a list called remove because these are all keys that we want to remvoe from player
                         remove.append(i)
+                        break
                 #finds the indice of the card picked when the cards are popped up. indice should range from 0,0 - 10,3
                 #anything else is not valid
-                if event.type == pygame.MOUSEBUTTONDOWN and show_cards == True:
-                    pos = pygame.mouse.get_pos()
-                    indiceX = (pos[0]-180)//60
-                    indiceY = (pos[1]-200)//90
-                    #if the indices youve chosen is an indice where a card is located, then go in this if statement
-                    #it should display the card for the proper player, get rid of the button option for card, and get rid
-                    #of the card from the display
-                    if indiceX >= 0 and indiceX<14 and indiceY >=0 and indiceY<4:
-                        #finds the one dimenesional indice for the card
-                        base = indiceY*13
-                        indice = base + indiceX +indiceY
-                        one_card = sorted_cards.pop(indice)
-                        all_chosen_cards.append(one_card)
-                        card_removed= listOfcards.pop(indice)
-                        show_cards = False
-                        chosen_card.append(removal3)
-                        chosen_card2.append(removal2)
+            if event.type == pygame.MOUSEBUTTONDOWN and show_cards == True:
+                pos = pygame.mouse.get_pos()
+                indiceX = (pos[0]-180)//60
+                indiceY = (pos[1]-200)//90
+                #if the indices youve chosen is an indice where a card is located, then go in this if statement
+                #it should display the card for the proper player, get rid of the button option for card, and get rid
+                #of the card from the display
+                if indiceX >= 0 and indiceX<14 and indiceY >=0 and indiceY<4:
+                    #finds the one dimenesional indice for the card
+                    base = indiceY*13
+                    indice = base + indiceX +indiceY
+                    one_card = sorted_cards.pop(indice)
+                    all_chosen_cards.append(one_card)
+                    card_removed= listOfcards.pop(indice)
+                    show_cards = False
+                    chosen_card.append(removal3)
+                    chosen_card2.append(removal2)
                                  
 
-                #remove contains all player add buttons that have been clicked. We dont need these buttons
-                #anymore because we just clicked them
-                elif show_cards ==False and play_hand==False:
-                    for i in remove:
-                        #i[2] contains player numbers
-                        temp.append([player[i][2], add_player_num])
-                        player.pop(i)
-                        remove=[]
-                #if we click a add_card button, turn show_cards to true and append the key
-                #card player
-                elif play_hand==True:
-                    if event.type == pygame.MOUSEBUTTONDOWN:
-                        for i in add_card:
-                            if add_card[i][2].collidepoint(event.pos):
-                                show_cards =True
-                                card_player.append(i)
-                                removal = i
-                                removal2 = add_card[i][2]
-                                removal3 = add_card[i][1] 
+            #remove contains all player add buttons that have been clicked. We dont need these buttons
+            #anymore because we just clicked them
+            elif show_cards ==False and play_hand==False :
+                
+                for i in remove:
+                    #i[2] contains player numbers
+                    temp.append([player[i][2], add_player_num])
+                    player.pop(i)
+                    remove=[]
+            #if we click a add_card button, turn show_cards to true and append the key
+            #card player
+            elif play_hand==True:
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    for i in add_card:
+                        if add_card[i][2].collidepoint(event.pos):
+                            show_cards =True
+                            card_player.append(i)
+                            removal = i
+                            removal2 = add_card[i][2]
+                            removal3 = add_card[i][1] 
+                            break
+                    
 
         a,b = pygame.mouse.get_pos()
+        if show_cards == False and play_hand==True:
+            x=0
+            for i in add_card:
+                x=x+1
+                if add_card[i][2].x<= a <add_card[i][2].x+90 and add_card[i][2].y <= b <= add_card[i][2].y+115:
+                    pygame.draw.rect(screen, (180, 180, 180), add_card[i][2])
+                else:
+                    pygame.draw.rect(screen, (0,128,0), add_card[i][2])
+            
         #loops through player which is information for each button, and if mouse is on top of any 
         #of the add player buttons, highlight
         if show_cards == False:
@@ -272,13 +287,7 @@ def main():
                 surf2 = font.render('     Player '+str(i[1]), True, 'white')
                 screen.blit(surf2,(i[0].x, i[0].y))
         #display the empty card slots buttons
-        if show_cards == False and play_hand==True:
-            for i in add_card:
-                if add_card[i][2].x<= a <add_card[i][2].x+90 and add_card[i][2].y <= b <= add_card[i][2].y+115:
-                    pygame.draw.rect(screen, (180, 180, 180), add_card[i][2])
-                else:
-                    pygame.draw.rect(screen, (0,128,0), add_card[i][2])
-            screen.blit(add_card[i][1],(add_card[i][2].x, add_card[i][2].y))
+        
         
 
         #display chosen cards
@@ -312,7 +321,7 @@ def main():
             pygame.draw.rect(screen, (0,128,0), begin_button)
         if play_hand==False:
             screen.blit(begin_text,(begin_button.x, begin_button.y)) 
-    
+
         pygame.display.update()
 
 
