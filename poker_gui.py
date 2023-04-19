@@ -159,6 +159,9 @@ def main():
             if value_cards[i] in unsorted_cards[j]:
                 sorted_cards.append(pygame.image.load(unsorted_cards[j]))
                 listOfcards.append(unsorted_cards[j])
+
+    #accumulator for how many popped cards
+    x_y_acc= 0
     #returns a dictionaries of all things needed to make a add player button
     player = addplayer()
     blank_card = sorted_cards[52]
@@ -181,7 +184,9 @@ def main():
     begin_text = font2.render('Play Hand!', True, 'white')
     begin_button = pygame.Rect(556, 450, 95, 22)
     while running:    #checks each event and see if it should quit
+        #screen fill makes bacground green
         screen.fill([0,128,0])
+        #draws all the empty slots
         rect(screen)
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
@@ -223,17 +228,17 @@ def main():
                 #if the indices youve chosen is an indice where a card is located, then go in this if statement
                 #it should display the card for the proper player, get rid of the button option for card, and get rid
                 #of the card from the display
-                if indiceX >= 0 and indiceX<14 and indiceY >=0 and indiceY<4:
-                    #finds the one dimenesional indice for the card
-                    base = indiceY*13
-                    indice = base + indiceX +indiceY
+                #finds the one dimenesional indice for the card
+                base = indiceY*13
+                indice = base + indiceX +indiceY
+
+                if indice<len(sorted_cards)-1:
                     one_card = sorted_cards.pop(indice)
                     all_chosen_cards.append(one_card)
                     card_removed= listOfcards.pop(indice)
                     show_cards = False
                     chosen_card.append(removal3)
                     chosen_card2.append(removal2)
-                                 
 
             #remove contains all player add buttons that have been clicked. We dont need these buttons
             #anymore because we just clicked them
@@ -259,15 +264,13 @@ def main():
                     
 
         a,b = pygame.mouse.get_pos()
-        if show_cards == False and play_hand==True:
-            x=0
-            for i in add_card:
-                x=x+1
-                if add_card[i][2].x<= a <add_card[i][2].x+90 and add_card[i][2].y <= b <= add_card[i][2].y+115:
-                    pygame.draw.rect(screen, (180, 180, 180), add_card[i][2])
-                else:
-                    pygame.draw.rect(screen, (0,128,0), add_card[i][2])
-            
+        #if show_cards == False and play_hand==True:
+            #for i in add_card:
+                #if add_card[i][2].x<= a <add_card[i][2].x+90 and add_card[i][2].y <= b <= add_card[i][2].y+115:
+                    #static = static+1
+                    #pygame.draw.rect(screen, (180, 180, 180), add_card[i][2])
+                    #break
+    
         #loops through player which is information for each button, and if mouse is on top of any 
         #of the add player buttons, highlight
         if show_cards == False:
@@ -291,6 +294,7 @@ def main():
         
 
         #display chosen cards
+    
         for i in range(len(chosen_card)):
             screen.blit(pygame.transform.scale(all_chosen_cards[i], (80,105)), (chosen_card2[i].x, chosen_card2[i].y))
             
@@ -323,7 +327,7 @@ def main():
             screen.blit(begin_text,(begin_button.x, begin_button.y)) 
 
         pygame.display.update()
-
+    
 
 
 main()
