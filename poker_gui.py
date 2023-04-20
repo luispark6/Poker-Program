@@ -160,6 +160,7 @@ def main():
                 sorted_cards.append(pygame.image.load(unsorted_cards[j]))
                 listOfcards.append(unsorted_cards[j])
 
+    begin_game_bool =False
     #accumulator for how many popped cards
     x_y_acc= 0
     #returns a dictionaries of all things needed to make a add player button
@@ -263,8 +264,10 @@ def main():
                             removal3 = add_card[i][1] 
                             break
 
-            elif event.type == pygame.MOUSEBUTTONDOWN and show_cards==False and play_hand==True:
-                if hidden_cards.collidepoint(event.pos):
+            if event.type == pygame.MOUSEBUTTONDOWN and show_cards==False and play_hand==True:
+                if begin_game_bool == False:
+                    begin_game_bool=True
+                elif hidden_cards.collidepoint(event.pos):
                     print("hi")
 
         a,b = pygame.mouse.get_pos()
