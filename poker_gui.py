@@ -183,6 +183,7 @@ def main():
     #button to play the hand
     begin_text = font2.render('Play Hand!', True, 'white')
     begin_button = pygame.Rect(556, 450, 95, 22)
+    hidden_cards = pygame.Rect(425, 450, 325, 22)
     while running:    #checks each event and see if it should quit
         #screen fill makes bacground green
         screen.fill([0,128,0])
@@ -261,7 +262,10 @@ def main():
                             removal2 = add_card[i][2]
                             removal3 = add_card[i][1] 
                             break
-                    
+
+            elif event.type == pygame.MOUSEBUTTONDOWN and show_cards==False and play_hand==True:
+                if hidden_cards.collidepoint(event.pos):
+                    print("hi")
 
         a,b = pygame.mouse.get_pos()
         #if show_cards == False and play_hand==True:
@@ -325,6 +329,17 @@ def main():
             pygame.draw.rect(screen, (0,128,0), begin_button)
         if play_hand==False:
             screen.blit(begin_text,(begin_button.x, begin_button.y)) 
+
+
+        randomize_text = font2.render('Give opponents random hidden cards', True, 'white')
+        if hidden_cards.x<= a < hidden_cards.x+325 and  hidden_cards.y <= b <=  hidden_cards.y+22 and play_hand ==True and show_cards==False:
+            pygame.draw.rect(screen, (180,180,180), hidden_cards)
+        elif play_hand==True and show_cards==False:
+           pygame.draw.rect(screen, (0,128,0), hidden_cards)
+        if play_hand==True and show_cards==False:
+            screen.blit(randomize_text,(hidden_cards.x, hidden_cards.y)) 
+
+
 
         pygame.display.update()
     
