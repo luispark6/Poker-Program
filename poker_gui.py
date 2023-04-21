@@ -266,8 +266,6 @@ def main():
                             removal2 = add_card[i][2]
                             removal3 = add_card[i][1] 
                             if i !="user1" and i!="user2" and i!="board1" and i!="board2" and i!="board3" and i!="board4" and i!="board5":
-                                print("hi")
-            
                                 deal_randoms_display=False
                             break
 
@@ -276,6 +274,7 @@ def main():
                     begin_game_bool=True
                 elif hidden_cards.collidepoint(event.pos):
                     deal_randoms=True
+                    deal_randoms_display=False
 
         a,b = pygame.mouse.get_pos()
         #if show_cards == False and play_hand==True:
