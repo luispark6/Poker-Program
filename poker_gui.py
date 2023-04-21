@@ -120,6 +120,8 @@ def addcard(player_info):
 
 
 def main():
+    copy_indicator=False
+    pop_indicator = True
     #this will be used to display cards in ascending order in interface
     value_cards=["Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King", 'default']
     FPS_CLOCK = pygame.time.Clock()
@@ -159,7 +161,7 @@ def main():
             if value_cards[i] in unsorted_cards[j]:
                 sorted_cards.append(pygame.image.load(unsorted_cards[j]))
                 listOfcards.append(unsorted_cards[j])
-
+    deal_randoms = False
     begin_game_bool =False
     #accumulator for how many popped cards
     x_y_acc= 0
@@ -185,6 +187,7 @@ def main():
     begin_text = font2.render('Play Hand!', True, 'white')
     begin_button = pygame.Rect(556, 450, 95, 22)
     hidden_cards = pygame.Rect(425, 450, 325, 22)
+    deal_randoms_display = True
     while running:    #checks each event and see if it should quit
         #screen fill makes bacground green
         screen.fill([0,128,0])
@@ -262,13 +265,17 @@ def main():
                             removal = i
                             removal2 = add_card[i][2]
                             removal3 = add_card[i][1] 
+                            if i !="user1" and i!="user2" and i!="board1" and i!="board2" and i!="board3" and i!="board4" and i!="board5":
+                                print("hi")
+            
+                                deal_randoms_display=False
                             break
 
-            if event.type == pygame.MOUSEBUTTONDOWN and show_cards==False and play_hand==True:
+            if event.type == pygame.MOUSEBUTTONDOWN and show_cards==False and play_hand==True and deal_randoms == False and deal_randoms_display!=False:
                 if begin_game_bool == False:
                     begin_game_bool=True
                 elif hidden_cards.collidepoint(event.pos):
-                    print("hi")
+                    deal_randoms=True
 
         a,b = pygame.mouse.get_pos()
         #if show_cards == False and play_hand==True:
@@ -277,7 +284,7 @@ def main():
                     #static = static+1
                     #pygame.draw.rect(screen, (180, 180, 180), add_card[i][2])
                     #break
-    
+
         #loops through player which is information for each button, and if mouse is on top of any 
         #of the add player buttons, highlight
         if show_cards == False:
@@ -297,11 +304,8 @@ def main():
                 surf2 = font.render('     Player '+str(i[1]), True, 'white')
                 screen.blit(surf2,(i[0].x, i[0].y))
         #display the empty card slots buttons
-        
-        
-
         #display chosen cards
-    
+
         for i in range(len(chosen_card)):
             screen.blit(pygame.transform.scale(all_chosen_cards[i], (80,105)), (chosen_card2[i].x, chosen_card2[i].y))
             
@@ -333,14 +337,31 @@ def main():
         if play_hand==False:
             screen.blit(begin_text,(begin_button.x, begin_button.y)) 
 
+        if deal_randoms_display==True:
+        
+            randomize_text = font2.render('Give opponents random hidden cards', True, 'white')
+            if hidden_cards.x<= a < hidden_cards.x+325 and  hidden_cards.y <= b <=  hidden_cards.y+22 and play_hand ==True and show_cards==False:
+                pygame.draw.rect(screen, (180,180,180), hidden_cards)
+            elif play_hand==True and show_cards==False:
+                pygame.draw.rect(screen, (0,128,0), hidden_cards)
+            if play_hand==True and show_cards==False:
+                screen.blit(randomize_text,(hidden_cards.x, hidden_cards.y)) 
 
-        randomize_text = font2.render('Give opponents random hidden cards', True, 'white')
-        if hidden_cards.x<= a < hidden_cards.x+325 and  hidden_cards.y <= b <=  hidden_cards.y+22 and play_hand ==True and show_cards==False:
-            pygame.draw.rect(screen, (180,180,180), hidden_cards)
-        elif play_hand==True and show_cards==False:
-           pygame.draw.rect(screen, (0,128,0), hidden_cards)
-        if play_hand==True and show_cards==False:
-            screen.blit(randomize_text,(hidden_cards.x, hidden_cards.y)) 
+
+
+        if deal_randoms ==True:
+            if copy_indicator == False:
+                add_card_copy = add_card.copy()
+                copy_indicator=True
+            for i in add_card_copy:
+                if i !="user1" and i!="user2" and i!="board1" and i!="board2" and i!="board3" and i!="board4" and i!="board5":
+                    screen.blit(pygame.transform.scale(blank_card, (80,105)), (add_card_copy[i][2].x, add_card_copy[i][2].y))
+                    if pop_indicator == True:
+                        add_card.pop(i)
+            pop_indicator=False
+            
+            
+
 
 
 
