@@ -109,6 +109,26 @@ class Poker:
             self.deck.pop(ran_num)
 
     
+    #randomizes all other players while user's card is still empty
+    def randomize_other_empty(self):
+        for i in range (2, self.player_count+1): #go through players and append 1st card
+            ran_num = random.choice(self.list) #random generate a number from 0-51
+            while ran_num == -1: #if the random number is -1, card not valid
+                ran_num = random.choice(self.list) #choose a random number until its valid
+            self.list[ran_num] = -1 #set element ran_num to -1 to set invalid state
+            self.player[i].append(self.deck[ran_num]) #append the card from deck to player
+            self.deck.pop(ran_num) #pop ran_num key value because card already used
+
+        #do it one more time so that each player has two cards
+        for i in range (2, self.player_count+1):
+            ran_num = random.choice(self.list)
+            while ran_num == -1:
+                ran_num = random.choice(self.list)
+            self.list[ran_num] = -1
+            self.player[i].append(self.deck[ran_num])
+            self.deck.pop(ran_num)
+
+
     def randomize_entire_board(self, amount):
         #we copy the list because we need to maintain the original deck
         sub_deck = self.deck.copy()

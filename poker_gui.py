@@ -261,8 +261,10 @@ def main():
                                 card[user].append(round1.deck[i])
                                 user = 0
                             elif board!=0:
+            
                                 card[board].append(round1.deck[i])
                                 board = 0
+
 
                     pop_player = 0
                     #adds all cards to the poker class for players and table_cards
@@ -273,7 +275,6 @@ def main():
                         elif "user" in i and len(card[i])==2:
                             round1.add_hand(card[i], 1)
                             pop_player =i
-                        
                         elif "board" in i:
                             round1.add_card_board(card[i][0])
                             pop_player =i
@@ -304,14 +305,14 @@ def main():
                             elif "user" in i:
                                 #slices it so that the the key is 'player#'
                                 user = i[0:4]
-                                #if playerss doesnt exist in the dictionary, make it a key with value of list
+                                #if user doesnt exist in the dictionary, make it a key with value of list
                                 if user not in card:
                                     card[user] = []
 
                             elif "board" in i:
                                 #slices it so that the the key is 'player#'
                                 board = i[0:5]
-                                #if playerss doesnt exist in the dictionary, make it a key with value of list
+                                #if board doesnt exist in the dictionary, make it a key with value of list
                                 if board not in card:
                                     card[board] = []
     
@@ -330,7 +331,9 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN and show_cards==False and play_hand==True and deal_randoms == False and deal_randoms_display!=False:
                 if begin_game_bool == False:
                     begin_game_bool=True
+            #if we give cards hidden cards, we call the method that does so for the class poker, then set the indicators
                 elif hidden_cards.collidepoint(event.pos):
+                    round1.randomize_other_empty()
                     deal_randoms=True
                     deal_randoms_display=False
 
