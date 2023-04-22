@@ -120,10 +120,14 @@ def addcard(player_info):
 
 
 def main():
+    board= 0 
+    playerss = 0
+    user =0
+    num_player = 1
     copy_indicator=False
     pop_indicator = True
     #this will be used to display cards in ascending order in interface
-    value_cards=["Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King", 'default']
+    value_cards=["Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", 'default']
     FPS_CLOCK = pygame.time.Clock()
     #intializing the game
     pygame.init()
@@ -188,6 +192,7 @@ def main():
     begin_button = pygame.Rect(556, 450, 95, 22)
     hidden_cards = pygame.Rect(425, 450, 325, 22)
     deal_randoms_display = True
+    card = {}
     while running:    #checks each event and see if it should quit
         #screen fill makes bacground green
         screen.fill([0,128,0])
@@ -202,6 +207,7 @@ def main():
             #if we click on start game, begin the game. There must be atleast 2 players
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if begin_button.collidepoint(event.pos) and add_player_num!=1:
+                    round1 = Poker(num_player)
                     play_hand=True
             if event.type == pygame.MOUSEBUTTONDOWN and show_cards==False and play_hand==False:
                 #iterate through each add player button if we press down on the mouse
@@ -209,6 +215,7 @@ def main():
                     #if we pressed down on the mouse and it happens to colllide with one of the players, 
                     #go in the if statement
                     if player[i][2].collidepoint(event.pos):
+                        num_player=num_player+1
                         #update the player number
                         add_player_num = add_player_num +1
                         #these are the keys of each player and their cards
@@ -244,24 +251,70 @@ def main():
                     show_cards = False
                     chosen_card.append(removal3)
                     chosen_card2.append(removal2)
+                    #this appends all chosen cards to the table/players
+                    for i in round1.deck:
+                        if str(round1.deck[i][0]) in card_removed and round1.deck[i][1] in card_removed:
+                            if playerss !=0:
+                                card[playerss].append(round1.deck[i])
+                                playerss = 0
+                            elif user !=0:
+                                card[user].append(round1.deck[i])
+                                user = 0
+                            elif board!=0:
+                                card[board].append(round1.deck[i])
+                                board = 0
 
+                    pop_player = 0
+                    #adds all cards to the poker class for players and table_cards
+                    for i in card:
+                        if "Player" in i and len(card[i])==2:
+                            round1.add_hand(card[i], int(i[6]))
+                            pop_player = i
+                        elif "user" in i and len(card[i])==2:
+                            round1.add_hand(card[i], 1)
+                            pop_player =i
+                        
+                        elif "board" in i:
+                            round1.add_card_board(card[i][0])
+                            pop_player =i
+                    if pop_player !=0:
+                        card.pop(pop_player)
             #remove contains all player add buttons that have been clicked. We dont need these buttons
             #anymore because we just clicked them
             elif show_cards ==False and play_hand==False :
-                
                 for i in remove:
                     #i[2] contains player numbers
                     temp.append([player[i][2], add_player_num])
                     player.pop(i)
                     remove=[]
             #if we click a add_card button, turn show_cards to true and append the key
-            #card player
+            #card player. i contains the player and which card that has been chosen
             elif play_hand==True:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     for i in add_card:
                         if add_card[i][2].collidepoint(event.pos):
                             show_cards =True
-                            card_player.append(i)
+                            if "Player" in i:
+                                #slices it so that the the key is 'player#'
+                                playerss = i[0:7]
+                                #if playerss doesnt exist in the dictionary, make it a key with value of list
+                                if playerss not in card:
+                                    card[playerss] = []
+                            #if key has "user" in it, then have 'user' as key for dictionary 'card'
+                            elif "user" in i:
+                                #slices it so that the the key is 'player#'
+                                user = i[0:4]
+                                #if playerss doesnt exist in the dictionary, make it a key with value of list
+                                if user not in card:
+                                    card[user] = []
+
+                            elif "board" in i:
+                                #slices it so that the the key is 'player#'
+                                board = i[0:5]
+                                #if playerss doesnt exist in the dictionary, make it a key with value of list
+                                if board not in card:
+                                    card[board] = []
+    
                             removal = i
                             removal2 = add_card[i][2]
                             removal3 = add_card[i][1] 
@@ -269,6 +322,11 @@ def main():
                                 deal_randoms_display=False
                             break
 
+
+            
+
+
+            #this will be an indicator if we choose random card for opponents
             if event.type == pygame.MOUSEBUTTONDOWN and show_cards==False and play_hand==True and deal_randoms == False and deal_randoms_display!=False:
                 if begin_game_bool == False:
                     begin_game_bool=True
@@ -347,7 +405,7 @@ def main():
                 screen.blit(randomize_text,(hidden_cards.x, hidden_cards.y)) 
 
 
-
+        #will display the random cards
         if deal_randoms ==True:
             if copy_indicator == False:
                 add_card_copy = add_card.copy()
@@ -359,6 +417,9 @@ def main():
                         add_card.pop(i)
             pop_indicator=False
             
+
+
+
             
 
 
