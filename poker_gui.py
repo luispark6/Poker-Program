@@ -87,6 +87,58 @@ def init_addcard():
     add_card["board5"]= [font, surf, board_card5]
     return add_card
 
+
+def find_probability(round1, deal_randoms):
+    if len(round1.table_cards) == 0 and deal_randoms==True:
+        round_sub = copy.deepcopy(round1)
+        percentage = probability.probability_preflop_hidden(round_sub, round1.player_count, False)
+        print(percentage)
+    elif len(round1.table_cards) == 0 and deal_randoms==False:
+        round_sub = copy.deepcopy(round1)
+        percentage = probability.probability_preflop_revealed(round_sub, round1.player_count, False)
+        print(percentage)
+
+    elif len(round1.table_cards) == 1 and deal_randoms==True:
+        round_sub = copy.deepcopy(round1)
+        percentage = probability.probability_postflop_hidden(round_sub, round1.player_count, False,  1)
+        print(percentage)
+
+    elif len(round1.table_cards) == 1 and deal_randoms==False:
+        round_sub = copy.deepcopy(round1)
+        percentage = probability.probability_postflop_revealed(round_sub, round1.player_count, False,  4)
+        print(percentage)
+
+    elif len(round1.table_cards) == 2 and deal_randoms==True:
+        round_sub = copy.deepcopy(round1)
+        percentage = probability.probability_postflop_hidden(round_sub, round1.player_count, False,  2)
+        print(percentage)
+
+    elif len(round1.table_cards) == 2 and deal_randoms==False:
+        round_sub = copy.deepcopy(round1)
+        percentage = probability.probability_postflop_revealed(round_sub, round1.player_count, False,  3)
+        print(percentage)
+
+    elif len(round1.table_cards) == 3 and deal_randoms==True:
+        round_sub = copy.deepcopy(round1)
+        percentage = probability.probability_postflop_hidden(round_sub, round1.player_count, False,  3)
+        print(percentage)
+
+    elif len(round1.table_cards) == 3 and deal_randoms==False:
+        round_sub = copy.deepcopy(round1)
+        percentage = probability.probability_postflop_revealed(round_sub, round1.player_count, False,  2)
+        print(percentage)
+
+    elif len(round1.table_cards) == 4 and deal_randoms==True:
+        round_sub = copy.deepcopy(round1)
+        percentage = probability.probability_postflop_hidden(round_sub, round1.player_count, False,  4)
+        print(percentage)
+
+    elif len(round1.table_cards) == 4 and deal_randoms==False:
+        round_sub = copy.deepcopy(round1)
+        percentage = probability.probability_postflop_revealed(round_sub, round1.player_count, False,  1)
+        print(percentage)
+        
+    return percentage
 def addcard(player_info):
     #this will take in the info of the add player button. it will see which outlined cards need
     #to be added to add_card dictionary. 
@@ -120,6 +172,9 @@ def addcard(player_info):
 
 
 def main():
+    waiting_flag = False
+    click_card_flag = False
+    percentage = -1
     play_hand_flag = False
     player_flag = False
     board= 0 
@@ -146,7 +201,7 @@ def main():
     unsorted_cards = []
     #this will iterate through the file and append the file names in unsorted_cards
     rect(screen)
-    directory = 'cards'
+    directory = 'Playing_Cards'
     for filename in os.listdir(directory):
         f = os.path.join(directory, filename)
         unsorted_cards.append(f)
@@ -193,10 +248,11 @@ def main():
     begin_text = font2.render('Play Hand!', True, 'white')
     begin_button = pygame.Rect(556, 450, 95, 22)
     hidden_cards = pygame.Rect(425, 450, 325, 22)
-    find_prob = pygame.Rect(365, 450, 325, 22)
+    find_prob = pygame.Rect(365, 450, 450, 22)
     find_prob_text = font2.render('Click Here To Calculate Your Percentage of Winning!', True, 'white')
     deal_randoms_display = True
     card = {}
+    percent_button = pygame.Rect(510, 640, 90, 20)
     while running:    #checks each event and see if it should quit
         #screen fill makes bacground green
         screen.fill([0,128,0])
@@ -238,6 +294,7 @@ def main():
                 #finds the indice of the card picked when the cards are popped up. indice should range from 0,0 - 10,3
                 #anything else is not valid
             if event.type == pygame.MOUSEBUTTONDOWN and show_cards == True:
+                click_card_flag = True
                 
                 pos = pygame.mouse.get_pos()
                 indiceX = (pos[0]-180)//60
@@ -248,7 +305,6 @@ def main():
                 #finds the one dimenesional indice for the card
                 base = indiceY*13
                 indice = base + indiceX +indiceY
-             
 
                 if indice<len(sorted_cards)-1:
                 
@@ -286,6 +342,8 @@ def main():
                             pop_player =i
                     if pop_player !=0:
                         card.pop(pop_player)
+
+                
                   
             #remove contains all player add buttons that have been clicked. We dont need these buttons
             #anymore because we just clicked them
@@ -298,7 +356,6 @@ def main():
             #if we click a add_card button, turn show_cards to true and append the key
             #card player. i contains the player and which card that has been chosen
             elif play_hand==True and event.type == pygame.MOUSEBUTTONDOWN:
-              
                 for i in add_card:
                     if add_card[i][2].collidepoint(event.pos):
                         show_cards =True
@@ -333,29 +390,17 @@ def main():
                             deal_randoms_display=False
                 
                         break
+            
 
-
-            if event.type == pygame.MOUSEBUTTONDOWN and player_flag == True: 
-                
+            if (event.type == pygame.MOUSEBUTTONDOWN and player_flag == True): 
                 if find_prob.collidepoint(event.pos):
-                    print(round1.player)
-                    if len(round1.table_cards) == 0 and deal_randoms==True:
-                        round_sub = copy.deepcopy(round1)
-                        percentage = probability.probability_preflop_hidden(round_sub, round1.player_count, False)
-                        print(percentage)
-                    elif len(round1.table_cards) == 0 and deal_randoms==False:
-                        round_sub = copy.deepcopy(round1)
-                        percentage = probability.probability_preflop_revealed(round_sub, round1.player_count, False)
-                        print(percentage)
-
-                    elif len(round1.table_cards) == 1 and deal_randoms==True:
-                        round_sub = copy.deepcopy(round1)
-                        percentage = probability.probability_postflop_hidden(round_sub, round1.player_count, False,  1)
-                        print(percentage)
-
-                    
-
-
+                    waiting = font2.render('Calculating.............', True, 'white')
+                    screen.blit(waiting,(540, 300))
+                    #pygame.draw.rect(screen, (0,128,0), waiting_button)
+    
+                    waiting_flag=True
+            
+    
             #this will be an indicator if we choose random card for opponents
             if event.type == pygame.MOUSEBUTTONDOWN and show_cards==False and play_hand==True and deal_randoms == False and deal_randoms_display!=False:
                 if begin_game_bool == False:
@@ -388,6 +433,11 @@ def main():
 
                     deal_randoms=True
                     deal_randoms_display=False
+
+            #if click_card_flag == True:
+                #if percentage != -1:
+                    #percentage = find_probability(round1, deal_randoms)
+                    #click_card_flag = False
      
 
 
@@ -476,7 +526,7 @@ def main():
 
 
         #displays the find probability button if conditions are met
-        if play_hand==True and len(round1.table_cards) < 5:
+        if play_hand==True and len(round1.table_cards) < 5 and show_cards == False:
             if player_flag == False:
                 player_acc = 0
                 for i in round1.player:
@@ -487,13 +537,27 @@ def main():
                 
                 player_flag = True
                 pygame.draw.rect(screen, (0,128,0), find_prob)
-                if show_cards==False:
-                    screen.blit(find_prob_text,(find_prob.x, find_prob.y)) 
-                
-    
+                screen.blit(find_prob_text,(find_prob.x, find_prob.y)) 
 
+        if percentage != -1 and len(round1.table_cards) < 5 and show_cards == False:
+            percent_display = str(percentage) + "% of Winning "
+            percent_text = font2.render(percent_display, True, 'white')
+            screen.blit(percent_text,(percent_button.x, percent_button.y)) 
+        
 
+        
+        
         pygame.display.update()
+
+
+        if waiting_flag ==True:
+        
+            percentage = find_probability(round1, deal_randoms)
+            waiting_flag = False
+
+
+
+
     
 
 

@@ -131,15 +131,15 @@ class Poker:
 
     def randomize_entire_board(self, amount):
         #we copy the list because we need to maintain the original deck
-        sub_deck = self.deck.copy()
-        sub_list = self.list.copy()
+        #sub_deck = self.deck.copy()
+        #sub_list = self.list.copy()
         for i in range(amount):
-            ran_num = random.choice(sub_list) #random generate a number from 0-51
+            ran_num = random.choice(self.list) #random generate a number from 0-51
             while ran_num == -1: #if the random number is -1, card not valid
-                ran_num = random.choice(sub_list) #choose a random number until its valid
-            sub_list[ran_num] = -1 #set element ran_num to -1 to set invalid state
-            self.table_cards.append(sub_deck[ran_num]) #append the card from deck to table
-            sub_deck.pop(ran_num) #pop ran_num key value because card already used
+                ran_num = random.choice(self.list) #choose a random number until its valid
+            self.list[ran_num] = -1 #set element ran_num to -1 to set invalid state
+            self.table_cards.append(self.deck[ran_num]) #append the card from deck to table
+            self.deck.pop(ran_num) #pop ran_num key value because card already used
 
     #clears the board
     def clear_board(self):
@@ -148,12 +148,9 @@ class Poker:
 
     
     #clears river and turn or river
-    def clear_remains(self, river):
-        if river == True:
-            self.table_cards.pop(-1)
-        else:
-            self.table_cards.pop(-1)
-            self.table_cards.pop(-1)
+    def clear_remains(self):
+        self.table_cards.pop(-1)
+
 
     def add_card_board(self, card):
         if card[1]=="Heart": base = 0
