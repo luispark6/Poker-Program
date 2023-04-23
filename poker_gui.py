@@ -120,6 +120,8 @@ def addcard(player_info):
 
 
 def main():
+    play_hand_flag = False
+    player_flag = False
     board= 0 
     playerss = 0
     user =0
@@ -191,6 +193,8 @@ def main():
     begin_text = font2.render('Play Hand!', True, 'white')
     begin_button = pygame.Rect(556, 450, 95, 22)
     hidden_cards = pygame.Rect(425, 450, 325, 22)
+    find_prob = pygame.Rect(365, 450, 325, 22)
+    find_prob_text = font2.render('Click Here To Calculate Your Percentage of Winning!', True, 'white')
     deal_randoms_display = True
     card = {}
     while running:    #checks each event and see if it should quit
@@ -205,7 +209,7 @@ def main():
             elif (event.type == pygame.QUIT):
                 return
             #if we click on start game, begin the game. There must be atleast 2 players
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONDOWN and play_hand == False:
                 if begin_button.collidepoint(event.pos) and add_player_num!=1:
                     round1 = Poker(num_player)
                     play_hand=True
@@ -234,6 +238,7 @@ def main():
                 #finds the indice of the card picked when the cards are popped up. indice should range from 0,0 - 10,3
                 #anything else is not valid
             if event.type == pygame.MOUSEBUTTONDOWN and show_cards == True:
+                
                 pos = pygame.mouse.get_pos()
                 indiceX = (pos[0]-180)//60
                 indiceY = (pos[1]-200)//90
@@ -243,8 +248,10 @@ def main():
                 #finds the one dimenesional indice for the card
                 base = indiceY*13
                 indice = base + indiceX +indiceY
+             
 
                 if indice<len(sorted_cards)-1:
+                
                     one_card = sorted_cards.pop(indice)
                     all_chosen_cards.append(one_card)
                     card_removed= listOfcards.pop(indice)
@@ -264,8 +271,7 @@ def main():
             
                                 card[board].append(round1.deck[i])
                                 board = 0
-
-
+                  
                     pop_player = 0
                     #adds all cards to the poker class for players and table_cards
                     for i in card:
@@ -280,6 +286,7 @@ def main():
                             pop_player =i
                     if pop_player !=0:
                         card.pop(pop_player)
+                  
             #remove contains all player add buttons that have been clicked. We dont need these buttons
             #anymore because we just clicked them
             elif show_cards ==False and play_hand==False :
@@ -290,41 +297,51 @@ def main():
                     remove=[]
             #if we click a add_card button, turn show_cards to true and append the key
             #card player. i contains the player and which card that has been chosen
-            elif play_hand==True:
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    for i in add_card:
-                        if add_card[i][2].collidepoint(event.pos):
-                            show_cards =True
-                            if "Player" in i:
-                                #slices it so that the the key is 'player#'
-                                playerss = i[0:7]
-                                #if playerss doesnt exist in the dictionary, make it a key with value of list
-                                if playerss not in card:
-                                    card[playerss] = []
-                            #if key has "user" in it, then have 'user' as key for dictionary 'card'
-                            elif "user" in i:
-                                #slices it so that the the key is 'player#'
-                                user = i[0:4]
-                                #if user doesnt exist in the dictionary, make it a key with value of list
-                                if user not in card:
-                                    card[user] = []
-
-                            elif "board" in i:
-                                #slices it so that the the key is 'player#'
-                                board = i[0:5]
-                                #if board doesnt exist in the dictionary, make it a key with value of list
-                                if board not in card:
-                                    card[board] = []
-    
-                            removal = i
-                            removal2 = add_card[i][2]
-                            removal3 = add_card[i][1] 
-                            if i !="user1" and i!="user2" and i!="board1" and i!="board2" and i!="board3" and i!="board4" and i!="board5":
-                                deal_randoms_display=False
-                            break
-
-
+            elif play_hand==True and event.type == pygame.MOUSEBUTTONDOWN:
+              
+                for i in add_card:
+                    if add_card[i][2].collidepoint(event.pos):
+                        show_cards =True
+                        if "Player" in i:
+                            #slices it so that the the key is 'player#'
+                            playerss = i[0:7]
+                            #if playerss doesnt exist in the dictionary, make it a key with value of list
+                            if playerss not in card:
             
+                                card[playerss] = []
+                        #if key has "user" in it, then have 'user' as key for dictionary 'card'
+                        elif "user" in i:
+                            #slices it so that the the key is 'player#'
+                            user = i[0:4]
+                            #if user doesnt exist in the dictionary, make it a key with value of list
+                            if user not in card:
+                                
+                                card[user] = []
+
+                        elif "board" in i:
+                            #slices it so that the the key is 'player#'
+                            board = i[0:5]
+                            #if board doesnt exist in the dictionary, make it a key with value of list
+                            if board not in card:
+                               
+                                card[board] = []
+
+                        removal = i
+                        removal2 = add_card[i][2]
+                        removal3 = add_card[i][1] 
+                        if i !="user1" and i!="user2" and i!="board1" and i!="board2" and i!="board3" and i!="board4" and i!="board5":
+                            deal_randoms_display=False
+                
+                        break
+
+
+            if event.type == pygame.MOUSEBUTTONDOWN and player_flag == True: 
+                print("hi")
+                if find_prob.collidepoint(event.pos):
+                    if len(round1.table_cards) == 0 and deal_randoms==True:
+                        round_sub = copy.deepcopy(round1)
+                        percentage = probability.probability_preflop_hidden(round_sub, round1.player_count, False)
+                        print(percentage)
 
 
             #this will be an indicator if we choose random card for opponents
@@ -334,8 +351,33 @@ def main():
             #if we give cards hidden cards, we call the method that does so for the class poker, then set the indicators
                 elif hidden_cards.collidepoint(event.pos):
                     round1.randomize_other_empty()
+                    #setting all used cards in list of cards and sorted cards equal to 0
+                    flag = 0
+                    for i in round1.player:
+                        if flag !=0:
+                            for j in range(len(listOfcards)):
+                                if listOfcards[j] !=0 and str(round1.player[i][0][0]) in listOfcards[j] and round1.player[i][0][1] in listOfcards[j] :
+                                    listOfcards[j]=0
+                                    sorted_cards[j] = 0
+                                elif listOfcards[j] !=0 and str(round1.player[i][1][0]) in listOfcards[j] and round1.player[i][1][1] in listOfcards[j] and listOfcards[j] !=0:
+                                    listOfcards[j]=0
+                                    sorted_cards[j] = 0
+                        else:
+                            flag=1
+
+                    #removes all cards from the sorted cards deck because they are being used now
+                    acc = 0
+                    for i in range(len(listOfcards)):
+                        if listOfcards[acc]==0:
+                            listOfcards.pop(acc)
+                            sorted_cards.pop(acc)
+                        else:
+                            acc=acc+1
+
                     deal_randoms=True
                     deal_randoms_display=False
+     
+
 
         a,b = pygame.mouse.get_pos()
         #if show_cards == False and play_hand==True:
@@ -419,13 +461,24 @@ def main():
                     if pop_indicator == True:
                         add_card.pop(i)
             pop_indicator=False
-            
 
 
+        #displays the find probability button if conditions are met
+        if play_hand==True and len(round1.table_cards) < 5:
+            if player_flag == False:
+                player_acc = 0
+                for i in round1.player:
+                    if len(round1.player[i])==2:
+                        player_acc =player_acc+1
 
-            
-
-
+            if player_acc == round1.player_count:
+                
+                player_flag = True
+                pygame.draw.rect(screen, (0,128,0), find_prob)
+                if show_cards==False:
+                    screen.blit(find_prob_text,(find_prob.x, find_prob.y)) 
+                
+    
 
 
         pygame.display.update()
