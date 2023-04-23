@@ -81,21 +81,26 @@ def probability_postflop_revealed(round1, num_player, print_txt, indicator):
 
 
 def probability_postflop_hidden(round1, num_player, print_txt, indicator):
-    if indicator ==True:
+    randomize = 5 - indicator 
+
+
+    #if indicator ==True:
         #if true, then only three cards remain the same on board and we 
         #randomize the next two
-        same_board = 3
-        randomize = 2
-    else:
-        same_board = 4
-        randomize = 1
+        #same_board = 3
+        #randomize = 2
+    #else:
+        #same_board = 4
+       # randomize = 1
     #accumulated wins from user
+
+    
     user_wins = 0
     for i in range(10000):
         #create new poker object
         roundx = Poker(num_player)
         #append the flop into board because the flop should be the same every iteration
-        for i in range(same_board):
+        for i in range(indicator):
             roundx.add_card_board(round1.table_cards[i])
         #randomize the the next two cards
         roundx.randomize_entire_board(randomize)

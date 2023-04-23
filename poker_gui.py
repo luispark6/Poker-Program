@@ -336,12 +336,24 @@ def main():
 
 
             if event.type == pygame.MOUSEBUTTONDOWN and player_flag == True: 
-                print("hi")
+                
                 if find_prob.collidepoint(event.pos):
+                    print(round1.player)
                     if len(round1.table_cards) == 0 and deal_randoms==True:
                         round_sub = copy.deepcopy(round1)
                         percentage = probability.probability_preflop_hidden(round_sub, round1.player_count, False)
                         print(percentage)
+                    elif len(round1.table_cards) == 0 and deal_randoms==False:
+                        round_sub = copy.deepcopy(round1)
+                        percentage = probability.probability_preflop_revealed(round_sub, round1.player_count, False)
+                        print(percentage)
+
+                    elif len(round1.table_cards) == 1 and deal_randoms==True:
+                        round_sub = copy.deepcopy(round1)
+                        percentage = probability.probability_postflop_hidden(round_sub, round1.player_count, False,  1)
+                        print(percentage)
+
+                    
 
 
             #this will be an indicator if we choose random card for opponents
