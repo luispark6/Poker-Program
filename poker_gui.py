@@ -92,52 +92,33 @@ def find_probability(round1, deal_randoms):
     if len(round1.table_cards) == 0 and deal_randoms==True:
         round_sub = copy.deepcopy(round1)
         percentage = probability.probability_preflop_hidden(round_sub, round1.player_count, False)
-        print(percentage)
     elif len(round1.table_cards) == 0 and deal_randoms==False:
         round_sub = copy.deepcopy(round1)
         percentage = probability.probability_preflop_revealed(round_sub, round1.player_count, False)
-        print(percentage)
-
     elif len(round1.table_cards) == 1 and deal_randoms==True:
         round_sub = copy.deepcopy(round1)
         percentage = probability.probability_postflop_hidden(round_sub, round1.player_count, False,  1)
-        print(percentage)
-
     elif len(round1.table_cards) == 1 and deal_randoms==False:
         round_sub = copy.deepcopy(round1)
         percentage = probability.probability_postflop_revealed(round_sub, round1.player_count, False,  4)
-        print(percentage)
-
     elif len(round1.table_cards) == 2 and deal_randoms==True:
         round_sub = copy.deepcopy(round1)
         percentage = probability.probability_postflop_hidden(round_sub, round1.player_count, False,  2)
-        print(percentage)
-
     elif len(round1.table_cards) == 2 and deal_randoms==False:
         round_sub = copy.deepcopy(round1)
         percentage = probability.probability_postflop_revealed(round_sub, round1.player_count, False,  3)
-        print(percentage)
-
     elif len(round1.table_cards) == 3 and deal_randoms==True:
         round_sub = copy.deepcopy(round1)
         percentage = probability.probability_postflop_hidden(round_sub, round1.player_count, False,  3)
-        print(percentage)
-
     elif len(round1.table_cards) == 3 and deal_randoms==False:
         round_sub = copy.deepcopy(round1)
         percentage = probability.probability_postflop_revealed(round_sub, round1.player_count, False,  2)
-        print(percentage)
-
     elif len(round1.table_cards) == 4 and deal_randoms==True:
         round_sub = copy.deepcopy(round1)
         percentage = probability.probability_postflop_hidden(round_sub, round1.player_count, False,  4)
-        print(percentage)
-
     elif len(round1.table_cards) == 4 and deal_randoms==False:
         round_sub = copy.deepcopy(round1)
-        percentage = probability.probability_postflop_revealed(round_sub, round1.player_count, False,  1)
-        print(percentage)
-        
+        percentage = probability.probability_postflop_revealed(round_sub, round1.player_count, False,  1)        
     return percentage
 def addcard(player_info):
     #this will take in the info of the add player button. it will see which outlined cards need
@@ -399,7 +380,6 @@ def main():
                     #pygame.draw.rect(screen, (0,128,0), waiting_button)
     
                     waiting_flag=True
-            
     
             #this will be an indicator if we choose random card for opponents
             if event.type == pygame.MOUSEBUTTONDOWN and show_cards==False and play_hand==True and deal_randoms == False and deal_randoms_display!=False:
