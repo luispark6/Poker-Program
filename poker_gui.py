@@ -158,6 +158,7 @@ def addcard(player_info):
 
 
 def main():
+    winning_flag = False
     waiting_flag = False
     click_card_flag = False
     percentage = -1
@@ -526,7 +527,22 @@ def main():
             screen.blit(percent_text,(percent_button.x, percent_button.y)) 
         
 
-        
+        if play_hand ==True and len(round1.table_cards) == 5 and deal_randoms == False:
+            if winning_flag==False:
+                winner = winners_circle.winning_players(round1.player, round1.table_cards, round1.player_count, False)
+                winning_flag==True
+                new_player = addplayer()
+
+            for i in winner:
+                num = -i+10
+                string = "player" + str(num)     
+                text = font2.render("Winner!", True, 'white')
+                pygame.draw.rect(screen, (0,128,0), new_player[string][2])
+                screen.blit(text,(new_player[string][2].x+15, new_player[string][2].y-15)) 
+
+
+
+
 
         pygame.display.update()
 
