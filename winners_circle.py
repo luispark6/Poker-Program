@@ -63,7 +63,6 @@ def winning_players(player, table_cards, num_player, print_txt):
     for i in range(len(players_points)):
         if players_points[i] == bestScore:
             indexOfScores.append(i+1)
-    
     if len(indexOfScores) ==1:
         if print_txt ==True:
             print("Player "+ str(indexOfScores[0])+" wins!")
@@ -84,7 +83,6 @@ def winning_players(player, table_cards, num_player, print_txt):
         winners_circle= ties_wins.fullhouse_ties(players_points, player, table_cards, indexOfScores, print_txt)
     elif bestScore == 8:
         winners_circle = ties_wins.four_ties(players_points, player, table_cards, indexOfScores, print_txt)
-        
     elif bestScore == 9:
         winners_circle = ties_wins.straight_flush_ties(players_points, player, table_cards, indexOfScores, print_txt)
     elif bestScore == 10:

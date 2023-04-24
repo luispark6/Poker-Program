@@ -99,11 +99,21 @@ def four(table_cards, player):
     #sort the list now
     ordered_list_previous = high_card(table_cards, player)
     #pops all cards part of the four of a kind
-    ordered_list = [value for value in ordered_list_previous if value !=card]
+    card1=0
+    if card == "Ace":
+        card1 = 14
+    if card == "King":
+        card1 = 13
+    if card == "Queen":
+        card1 = 12
+    if card == "Jack":
+        card1 = 11
+
+    ordered_list = [value for value in ordered_list_previous if value !=card1]
 
     #if there is a four of a kind, return True, card with four of a kind, and high card
    
-    return[True, i , ordered_list[-1]]
+    return[True, card , ordered_list[-1]]
 
 def three(table_cards, player):
     match = {

@@ -521,31 +521,35 @@ def main():
                 pygame.draw.rect(screen, (0,128,0), find_prob)
                 screen.blit(find_prob_text,(find_prob.x, find_prob.y)) 
 
-        if percentage != -1 and show_cards == False:
+        if percentage != -1 and show_cards == False and winning_flag ==False:
             percent_display = str(percentage) + "% of Winning "
             percent_text = font2.render(percent_display, True, 'white')
             screen.blit(percent_text,(percent_button.x, percent_button.y)) 
         
 
         if play_hand ==True and len(round1.table_cards) == 5 and deal_randoms == False:
-            if winning_flag==False:
+            if winning_flag == False:
+                player_acc = 0
+                for i in round1.player:
+                    if len(round1.player[i])==2:
+                        player_acc =player_acc+1
+            if winning_flag==False and player_acc == round1.player_count:
                 winner = winners_circle.winning_players(round1.player, round1.table_cards, round1.player_count, False)
-                winning_flag==True
-                new_player = addplayer()
+                winning_flag=True
+                text = font2.render("Winner!", True, 'green')
+            if winning_flag ==True:
+                for i in temp:
+                    if i[1] in winner:
+                        pygame.draw.rect(screen, (0,128,0), i[0])
+                        screen.blit(text,(i[0].x+15, i[0].y)) 
+                if 1 in winner:
+                    screen.blit(text,(percent_button.x+50, percent_button.y -10)) 
+            
+    
 
-            for i in winner:
-                num = -i+10
-                string = "player" + str(num)     
-                text = font2.render("Winner!", True, 'white')
-                pygame.draw.rect(screen, (0,128,0), new_player[string][2])
-                screen.blit(text,(new_player[string][2].x+15, new_player[string][2].y-15)) 
 
-
-
-
-
+                    
         pygame.display.update()
-
 
         if waiting_flag ==True:
         
