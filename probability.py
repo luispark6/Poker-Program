@@ -109,3 +109,18 @@ def probability_postflop_hidden(round1, num_player, print_txt, indicator):
     return percentage
 
 
+def proability_allcards_hidden(round1, num_player, print_txt):
+    user_wins = 0
+    for i in range(10000):
+        roundx = Poker(num_player)
+        for i in range(5):
+            roundx.add_card_board(round1.table_cards[i])
+        roundx.randomize_others(round1.player[1])
+        list  = winners_circle.winning_players(roundx.player, roundx.table_cards, num_player, print_txt)
+        if len(list)==1 and list[0]==1:
+            user_wins = user_wins+1
+    percentage = user_wins/10000
+    percentage = percentage*100
+    percentage = float(f'{percentage:.4f}')
+    return percentage
+    
