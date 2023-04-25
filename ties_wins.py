@@ -508,12 +508,49 @@ def four_ties(players_points, player, table_cards, indexOfScores, print_txt):
     info = []
     max_high=0
     winners_circle= []
+    
+    for i in range(len(indexOfScores)):
+        four_indicator = winner.four(table_cards, player[indexOfScores[i]])
+        if four_indicator[1] == "King": four_indicator[1]=13
+        elif four_indicator[1] == "Queen": four_indicator[1]=12
+        elif four_indicator[1] == "Jack": four_indicator[1]=11
+        elif four_indicator[1] == "Ace": four_indicator[1]=14
+        info.append([four_indicator[1], indexOfScores[i]])
+        
+
+
+        if four_indicator[1]>max_high:
+            max_high = four_indicator[1]
+    acc= 0 
+    
+    #remove all players with the highest high card
+    for i in range(len(info)):
+        if info[acc][0]!=max_high:
+            info.remove(info[acc])
+        else:
+            acc=acc+1
+
+    if len(info) ==1:
+        if info[0][0] == 13: info[0][0]="King"
+        elif info[0][0] == 12: info[0][0]="Queen"
+        elif info[0][0] == 11: info[0][0]="Jack"
+        elif info[0][0] == 14: info[0][0]="Ace"
+        if print_txt ==True:
+            print("Player "+str(info[0][1])+" wins with a four of a kind with a high card of "+str(info[0][0]))
+        winners_circle.append(info[0][1])
+        #print(winners_circle)
+        return winners_circle
+    #if only one player has the max high card, then winner
+    info = []
+    max_high=0
+    winners_circle= []
     for i in range(len(indexOfScores)):
         four_indicator = winner.four(table_cards, player[indexOfScores[i]])
         info.append([four_indicator[2], indexOfScores[i]])
         if four_indicator[2]>max_high:
             max_high = four_indicator[2]
     acc= 0 
+    
     #remove all players with the highest high card
     for i in range(len(info)):
         if info[acc][0]!=max_high:

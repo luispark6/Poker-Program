@@ -299,8 +299,7 @@ def play():
                 #finds the one dimenesional indice for the card
                 base = indiceY*13
                 indice = base + indiceX +indiceY
-                if indice<len(sorted_cards)-1:
-                
+                if indice<len(sorted_cards)-1 and indice > -1:
                     one_card = sorted_cards.pop(indice)
                     all_chosen_cards.append(one_card)
                     card_removed= listOfcards.pop(indice)
