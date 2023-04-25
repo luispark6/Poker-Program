@@ -158,7 +158,8 @@ def addcard(player_info):
     return list
 
 
-def main():
+def play():
+    
     dont_add_flag = False
     random_cards = {}
     reveal_cards_flag = False
@@ -238,6 +239,8 @@ def main():
     chosen_card2=[]
     #button to play the hand
     begin_text = font2.render('Play Hand!', True, 'white')
+    reset_text = font2.render('Reset!', True, 'red')
+    reset_button = pygame.Rect(20, 20, 55, 20)
     begin_button = pygame.Rect(556, 450, 95, 22)
     hidden_cards = pygame.Rect(425, 450, 325, 22)
     find_prob = pygame.Rect(365, 450, 450, 22)
@@ -253,9 +256,9 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if (event.key == pygame.K_ESCAPE):
-                    running = False
+                    return False
             elif (event.type == pygame.QUIT):
-                return
+                return False
             #if we click on start game, begin the game. There must be atleast 2 players
             if event.type == pygame.MOUSEBUTTONDOWN and play_hand == False:
                 if begin_button.collidepoint(event.pos) and add_player_num!=1:
@@ -433,6 +436,12 @@ def main():
                     deal_randoms_display=False
             if event.type == pygame.MOUSEBUTTONDOWN and play_hand==True and deal_randoms == True and reveal_cards_flag ==True and reveal_cards.collidepoint(event.pos):
                 deal_randoms = False
+
+
+
+
+            if event.type == pygame.MOUSEBUTTONDOWN and reset_button.collidepoint(event.pos):
+                return True
                 
 
 
@@ -599,6 +608,9 @@ def main():
             if player_acc == round1.player_count and reveal_cards_flag ==True:
                 percent_text = font2.render("Reveal Cards", True, 'white')
                 screen.blit(percent_text,(reveal_cards.x, reveal_cards.y)) 
+
+        screen.blit(reset_text, (reset_button.x, reset_button.y))
+        
             
 
             
@@ -612,7 +624,9 @@ def main():
 
 
 
+
+
+
     
 
 
-main()
