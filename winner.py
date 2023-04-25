@@ -159,6 +159,7 @@ def three(table_cards, player):
     if len(card)!=1:
         return [True, card, []]
     ordered_list = [value for value in ordered_list_previous if value not in card ]
+
     #if there is a three of a kind, return True, card with three of a kind, and two high cards
     #card should only have one element because this is the case for only one three of a kind
     return [True, card, [ordered_list[-1], ordered_list[-2]]]

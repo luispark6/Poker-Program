@@ -67,6 +67,7 @@ def probability_postflop_revealed(round1, num_player, print_txt, indicator):
         roundx  = Poker(num_player)
         for i in round1.player:
             roundx.add_hand(round1.player[i],i)
+
         for i in range(5-indicator):
             roundx.add_card_board(round1.table_cards[i])
         roundx.randomize_entire_board(indicator)
