@@ -45,6 +45,7 @@ def rect(screen):
     pygame.draw.rect(screen, [0, 0, 0], pygame.Rect(745, 330, 90, 115),5) 
 
 def addplayer():
+    
     #make a dictionary with all needed information for all add player buttons
     player = {}
     font = pygame.font.SysFont('Arial', 15, bold = True)
@@ -158,6 +159,10 @@ def addcard(player_info):
 
 
 def main():
+    dont_add_flag = False
+    random_cards = {}
+    reveal_cards_flag = False
+    reveal_cards =  pygame.Rect(535, 550, 95, 22)
     winning_flag = False
     waiting_flag = False
     click_card_flag = False
@@ -316,6 +321,10 @@ def main():
                     pop_player = 0
                     #adds all cards to the poker class for players and table_cards
                     for i in card:
+                        if len(card[i])==1:
+                            dont_add_flag= True
+                        else:
+                            dont_add_flag= False
                         if "Player" in i and len(card[i])==2:
                             round1.add_hand(card[i], int(i[6]))
                             pop_player = i
@@ -384,7 +393,8 @@ def main():
                     waiting_flag=True
     
             #this will be an indicator if we choose random card for opponents
-            if event.type == pygame.MOUSEBUTTONDOWN and show_cards==False and play_hand==True and deal_randoms == False and deal_randoms_display!=False:
+            if event.type == pygame.MOUSEBUTTONDOWN and show_cards==False and play_hand==True and deal_randoms == False and \
+                deal_randoms_display!=False and dont_add_flag==False:
                 if begin_game_bool == False:
                     begin_game_bool=True
             #if we give cards hidden cards, we call the method that does so for the class poker, then set the indicators
@@ -397,9 +407,16 @@ def main():
                             for j in range(len(listOfcards)):
                                 if listOfcards[j] !=0 and str(round1.player[i][0][0]) in listOfcards[j] and round1.player[i][0][1] in listOfcards[j] :
                                     listOfcards[j]=0
+                                    if i not in random_cards:
+                                        random_cards[i] = []
+                                    random_cards[i].append(sorted_cards[j])
+                                    
                                     sorted_cards[j] = 0
                                 elif listOfcards[j] !=0 and str(round1.player[i][1][0]) in listOfcards[j] and round1.player[i][1][1] in listOfcards[j] and listOfcards[j] !=0:
                                     listOfcards[j]=0
+                                    if i not in random_cards:
+                                        random_cards[i] = []
+                                    random_cards[i].append(sorted_cards[j])
                                     sorted_cards[j] = 0
                         else:
                             flag=1
@@ -414,6 +431,10 @@ def main():
                             acc=acc+1
                     deal_randoms=True
                     deal_randoms_display=False
+            if event.type == pygame.MOUSEBUTTONDOWN and play_hand==True and deal_randoms == True and reveal_cards_flag ==True and reveal_cards.collidepoint(event.pos):
+                deal_randoms = False
+                
+
 
             #if click_card_flag == True:
                 #if percentage != -1:
@@ -452,8 +473,30 @@ def main():
         #display chosen cards
 
         for i in range(len(chosen_card)):
+            #print(all_chosen_cards)
             screen.blit(pygame.transform.scale(all_chosen_cards[i], (80,105)), (chosen_card2[i].x, chosen_card2[i].y))
             
+
+        #reveals the cards to the table
+        if deal_randoms == False and reveal_cards_flag ==True:
+            for i in range(2, round1.player_count+1):
+                card1 = random_cards[i][0]
+                card2 = random_cards[i][1]
+                string1 = "Player" + str(i) + "first_card"
+                string2= "Player" + str(i) + "second_card"
+                screen.blit(pygame.transform.scale(card1, (80,105)), (random_cards[string1][2].x, random_cards[string1][2].y))
+                screen.blit(pygame.transform.scale(card2, (80,105)), (random_cards[string2][2].x, random_cards[string2][2].y))
+
+            #print(random_cards)       #use add card info thingy
+            #for i in range(len(round1.player_num-1)):
+                #player_indicator=player_indicator+1
+                #string1 = "Player" + str(player_indicator) + "first_card"
+                #string2 = "Player" + str(player_indicator) + "second_card"
+            
+            #screen.blit(pygame.transform.scale(random_cards[2], (80,105)), (add_card[string1].x, add_card[string1].y))
+            #screen.blit(pygame.transform.scale(random_cards[2], (80,105)), (add_card[string2].x, add_card[string2].y))
+
+    
         #if true, display the cards
         if show_cards == True:
             pygame.draw.rect(screen, (0,128,0), removal2)
@@ -482,8 +525,7 @@ def main():
         if play_hand==False:
             screen.blit(begin_text,(begin_button.x, begin_button.y)) 
 
-        if deal_randoms_display==True:
-        
+        if play_hand ==True and deal_randoms_display==True and dont_add_flag ==False:        
             randomize_text = font2.render('Give opponents random hidden cards', True, 'white')
             if hidden_cards.x<= a < hidden_cards.x+325 and  hidden_cards.y <= b <=  hidden_cards.y+22 and play_hand ==True and show_cards==False:
                 pygame.draw.rect(screen, (180,180,180), hidden_cards)
@@ -502,7 +544,7 @@ def main():
                 if i !="user1" and i!="user2" and i!="board1" and i!="board2" and i!="board3" and i!="board4" and i!="board5":
                     screen.blit(pygame.transform.scale(blank_card, (80,105)), (add_card_copy[i][2].x, add_card_copy[i][2].y))
                     if pop_indicator == True:
-                        add_card.pop(i)
+                        random_cards[i]=add_card.pop(i)
             pop_indicator=False
 
 
@@ -544,11 +586,22 @@ def main():
                         screen.blit(text,(i[0].x+15, i[0].y)) 
                 if 1 in winner:
                     screen.blit(text,(percent_button.x+50, percent_button.y -10)) 
+        
+        if play_hand == True and deal_randoms == True:
             
-    
+            if reveal_cards_flag ==False:
+                player_acc = 0
+                for i in round1.player:
+                        if len(round1.player[i])==2:
+                            player_acc =player_acc+1
+            if player_acc == round1.player_count:
+                reveal_cards_flag = True
+            if player_acc == round1.player_count and reveal_cards_flag ==True:
+                percent_text = font2.render("Reveal Cards", True, 'white')
+                screen.blit(percent_text,(reveal_cards.x, reveal_cards.y)) 
+            
 
-
-                    
+            
         pygame.display.update()
 
         if waiting_flag ==True:
