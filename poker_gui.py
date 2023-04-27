@@ -193,7 +193,7 @@ def play():
     #name
     pygame.display.set_caption("Poker")
     #displays green background
-    bg_img = pygame.image.load('galaxy.png')
+    bg_img = pygame.image.load('sunset.jpg')
     bg_img = pygame.transform.scale(bg_img,(1200,775))
     #screen.fill([0,128,0])
     #indicator that checks if a slot has been chosen
@@ -246,7 +246,7 @@ def play():
     #contiains all rectangle information for each chosen card
     chosen_card2=[]
     #All information below are rectangle, font, and text information for display
-    reveal_cards =  pygame.Rect(535, 550, 95, 22) 
+    reveal_cards =  pygame.Rect(535, 550, 113, 22) 
     begin_text = font2.render('Play Hand!', True, 'white')
     reset_text = font2.render('Reset!', True, (248,248,255))
     reset_button = pygame.Rect(20, 20, 55, 20)
@@ -472,12 +472,19 @@ def play():
                      
         a,b = pygame.mouse.get_pos()
 
+
+
+        
+        if show_cards == False:
+            for i in add_card:
+                if add_card[i][2].x<= a < add_card[i][2].x+ 80 and add_card[i][2].y <= b <= add_card[i][2].y+105:
+                    pygame.draw.rect(screen, (255, 213, 128), add_card[i][2], 0 , 3)
         #loops through player which is information for each button, and if mouse is on top of any 
         #of the add player buttons, highlight
         if show_cards == False:
             for i in player:
                 if player[i][2].x<= a <player[i][2].x+94 and player[i][2].y <= b <= player[i][2].y+20:
-                    pygame.draw.rect(screen, (180, 180, 180), player[i][2])
+                    pygame.draw.rect(screen, (207, 159, 255), player[i][2], 0 , 3)
                 #loops over players and displays all the buttons
            
                 screen.blit(player[i][1],(player[i][2].x, player[i][2].y))
@@ -492,10 +499,7 @@ def play():
         #display chosen cards
 
         for i in range(len(chosen_card)):
-            #print(all_chosen_cards)
             screen.blit(pygame.transform.scale(all_chosen_cards[i], (80,105)), (chosen_card2[i].x, chosen_card2[i].y))
-            
-
         #reveals the cards to the table
         if deal_randoms == False and reveal_cards_flag ==True:
             for i in range(2, round1.player_count+1):
@@ -526,7 +530,7 @@ def play():
 
         #if we're not currently playing the hand, provide a button to start the game if wanted
         if begin_button.x<= a <begin_button.x+95 and begin_button.y <= b <= begin_button.y+22 and play_hand==False:
-            pygame.draw.rect(screen, (180, 180, 180), begin_button)
+            pygame.draw.rect(screen, (207, 159, 255), begin_button, 0 ,3)
         if play_hand==False:
             screen.blit(begin_text,(begin_button.x, begin_button.y)) 
 
@@ -534,7 +538,7 @@ def play():
         if play_hand ==True and deal_randoms_display==True and dont_add_flag ==False:        
             randomize_text = font2.render('Give opponents random hidden cards', True, 'white')
             if hidden_cards.x<= a < hidden_cards.x+325 and  hidden_cards.y <= b <=  hidden_cards.y+22 and play_hand ==True and show_cards==False:
-                pygame.draw.rect(screen, (180,180,180), hidden_cards)
+                pygame.draw.rect(screen, (207, 159, 255), hidden_cards, 0 ,3)
             if play_hand==True and show_cards==False:
                 screen.blit(randomize_text,(hidden_cards.x, hidden_cards.y)) 
 
@@ -563,9 +567,10 @@ def play():
 
             if player_acc == round1.player_count:
                 player_flag = True
-
+                if find_prob.x<= a < find_prob.x+450 and  find_prob.y <= b <=  find_prob.y+22:
+                    pygame.draw.rect(screen, (207, 159, 255), find_prob, 0 ,3)
+                
                 screen.blit(find_prob_text,(find_prob.x, find_prob.y)) 
-        
         #if user clicked to find the percentage and show cards is false, then display the percentage of winning
         if percentage != -1 and show_cards == False and winning_flag ==False:
             percent_display = str(percentage) + "% of Winning "
@@ -583,20 +588,17 @@ def play():
                 #finds the player that won
                 winner = winners_circle.winning_players(round1.player, round1.table_cards, round1.player_count, False)
                 winning_flag=True
-                text = font2.render("Winner!", True, 'green')
+                text = font2.render(" Winner!", True, 'white')
             if winning_flag ==True:
                 for i in temp:
                     if i[1] in winner:
-                        pygame.draw.rect(screen, (0,128,0), i[0])
+                        pygame.draw.rect(screen, (255, 213, 128), i[0])
                         screen.blit(text,(i[0].x+15, i[0].y)) 
                 if 1 in winner:
                     screen.blit(text,(percent_button.x+50, percent_button.y -10)) 
-
-
             
         #if we're in the hand and players have hidden cards, always have a reveal card button
         if play_hand == True and deal_randoms == True:
-            
             if reveal_cards_flag ==False:
                 player_acc = 0
                 for i in round1.player:
@@ -605,8 +607,14 @@ def play():
             if player_acc == round1.player_count:
                 reveal_cards_flag = True
             if player_acc == round1.player_count and reveal_cards_flag ==True:
+                if reveal_cards.x<= a < reveal_cards.x+113 and reveal_cards.y <= b <= reveal_cards.y+22:
+                    pygame.draw.rect(screen, (207, 159, 255), reveal_cards, 0 ,3)
                 percent_text = font2.render("Reveal Cards", True, 'white')
                 screen.blit(percent_text,(reveal_cards.x, reveal_cards.y)) 
+        
+
+        if reset_button.x<= a < reset_button.x+55 and reset_button.y <= b <= reset_button.y+20:
+            pygame.draw.rect(screen, (207, 159, 255), reset_button, 0 ,3)
 
         screen.blit(reset_text, (reset_button.x, reset_button.y))    
         pygame.display.update()
@@ -614,6 +622,7 @@ def play():
         if waiting_flag ==True:
             percentage = find_probability(round1, deal_randoms)
             waiting_flag = False
+        FPS_CLOCK.tick(40)
 
 
 
