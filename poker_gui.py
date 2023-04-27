@@ -175,15 +175,20 @@ def play():
     deal_randoms_display = True #indicates if the button for deal randoms is displayed
 
 
-    random_cards = {} #keys are players and values are card
-    reveal_cards =  pygame.Rect(535, 550, 95, 22)
-    percentage = -1
+    random_cards = {} #keys are players and values are hidden cards that are random 
+    #percentage will be the probability of winning. We set to -1 because we set it 
+    #at a invalid state
+    percentage = -1 
+    #will contain information of board cards
     board= 0 
+    #will be a 'player#' key for the dictionary 'cards
     playerss = 0
     user =0
     num_player = 1
+
     #this will be used to display cards in ascending order in interface
-    value_cards=["Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", 'default']
+    value_cards=["Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", \
+        "King", 'default']
     FPS_CLOCK = pygame.time.Clock()
     #intializing the game
     pygame.init()
@@ -202,44 +207,48 @@ def play():
     for filename in os.listdir(directory):
         f = os.path.join(directory, filename)
         unsorted_cards.append(f)
-    #intiailzing sorted_cards. This will append the png files from Ace-King in image form for pygame
+    #intiailzing sorted_cards. This will append the png files from Ace-King in image 
+    #form for pygame
     sorted_cards=[]
     #this will be used later to indicate which card has been chosen
     listOfcards = []
-    #value cards go in ascending order, so we append to sorted_cards from smallest to biggest
+    #value cards go in ascending order, so we append to sorted_cards from smallest
+    #to biggest
     #font and surf for the add_card
     font = pygame.font.SysFont('Arial', 15, bold = True)
     surf = font.render('', True, 'white')
-    #indicator if hand has begun
-    
+    #font and text to tell user to add players
     font2 = pygame.font.SysFont('Arial', 18, bold = True)
     begin_game_text = font.render('Please add players before starting the hand', True, 'white')
+    #appends cards from A-K to listOfcards and card images from A-K to sorted cards
     for i in range(len(value_cards)):
         for j in range(len(unsorted_cards)):
             if value_cards[i] in unsorted_cards[j]:
                 sorted_cards.append(pygame.image.load(unsorted_cards[j]))
                 listOfcards.append(unsorted_cards[j])
-    #accumulator for how many popped cards
-    x_y_acc= 0
     #returns a dictionaries of all things needed to make a add player button
     player = addplayer()
+    #setting the blank card equal to the image of the face down card
     blank_card = sorted_cards[52]
-    #add_card will contain all available add card buttons. We are intiliazing in 
-    #the line below
+    #add_card will contain all available information for each add card first indice will 
+    #hold the font info, second indice holds the surface info, and third holds rectangle info
     add_card = init_addcard()
-    #this will be used to indicate which number player has been added
+    #add_player_num keeps track of number of players in game
     add_player_num = 1
-    
-    #this will contain the player in which the user picks the card for
-    card_player =[]
     #list of all chosen cards
     all_chosen_cards = []
+    #remove will contain all keys we need to remove from 'player' dictionary
     remove = []
+    #will contain the information of the just popped information from player
     temp = []
+    #removal will contain which add_card button that was just clicked
     removal=0
+    #contains all surfaces of the chosen card
     chosen_card = []
+    #contiains all rectangle information for each chosen card
     chosen_card2=[]
-    #button to play the hand
+    #All information below are rectangle, font, and text information for display
+    reveal_cards =  pygame.Rect(535, 550, 95, 22) 
     begin_text = font2.render('Play Hand!', True, 'white')
     reset_text = font2.render('Reset!', True, 'red')
     reset_button = pygame.Rect(20, 20, 55, 20)
