@@ -34,7 +34,7 @@ def probability_preflop_hidden(round1, num_player, print_txt):
     percentage = float(f'{percentage:.4f}')
     return percentage
 
-
+#finds probability of winning given that we are at preflop and cards are revealed
 def probability_preflop_revealed(round1, num_player, print_txt):
     #accumulated wins from user
     user_wins = 0
@@ -57,7 +57,7 @@ def probability_preflop_revealed(round1, num_player, print_txt):
     percentage = float(f'{percentage:.4f}')
     return percentage
 
-
+#finds the probability of winning given a card has been dealt and players' cards are revealed
 def probability_postflop_revealed(round1, num_player, print_txt, indicator):
     #accumulated wins from user
     user_wins = 0
@@ -83,7 +83,7 @@ def probability_postflop_revealed(round1, num_player, print_txt, indicator):
     percentage = float(f'{percentage:.4f}')
     return percentage
 
-
+#finds the probability of winning if a card was dealt and cards are hidden
 def probability_postflop_hidden(round1, num_player, print_txt, indicator):
     randomize = 5 - indicator 
     #accumulated wins from user
@@ -109,7 +109,7 @@ def probability_postflop_hidden(round1, num_player, print_txt, indicator):
     percentage = float(f'{percentage:.4f}')
     return percentage
 
-
+#finds the probabiltiy given that all opponents' cards are hidden and there are 5 table cards
 def proability_allcards_hidden(round1, num_player, print_txt):
     user_wins = 0
     for i in range(10000):

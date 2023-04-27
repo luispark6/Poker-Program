@@ -1,6 +1,7 @@
 import random
 import copy
 class Poker:
+#intializes the board and players
     def __init__(self, player_count):
         self.deck = {} #deck is in form of dictionary
         self.table_cards = [] #5 cards layed on the table
@@ -31,7 +32,7 @@ class Poker:
                 suit_indicator = suit_indicator+1 #update suit indicator for new suit
                 card_num=1 #reset card number
         
-
+#deals cards to players
     def deal_cards(self, no_deal):
 
         #no deal is gonna be the player not to deal out
@@ -54,7 +55,7 @@ class Poker:
                 self.list[ran_num] = -1
                 self.player[i].append(self.deck[ran_num])
                 self.deck.pop(ran_num)
-        
+#deals three cards to table  
     def deal_flop(self):
         for i in range(3):
             ran_num = random.choice(self.list) #random generate a number from 0-51
@@ -63,7 +64,7 @@ class Poker:
             self.list[ran_num] = -1 #set element ran_num to -1 to set invalid state
             self.table_cards.append(self.deck[ran_num]) #append the card from deck to table
             self.deck.pop(ran_num) #pop ran_num key value because card already used
-
+#deals one card to the table
     def deal_turn(self):
         ran_num = random.choice(self.list) #random generate a number from 0-51
         while ran_num == -1: #if the random number is -1, card not valid
@@ -72,7 +73,7 @@ class Poker:
         self.table_cards.append(self.deck[ran_num]) #append the card from deck to table
         self.deck.pop(ran_num) #pop ran_num key value because card already used
 
-    #this is to randomize all other players except the user's cards
+#this is to randomize all other players except the user's cards
     def randomize_others(self, player1):
         self.player[1].append(player1[0]) #append the desired first card to player 1
         self.player[1].append(player1[1])#append the desired second card to player 1
@@ -109,7 +110,7 @@ class Poker:
             self.deck.pop(ran_num)
 
     
-    #randomizes all other players while user's card is still empty
+#randomizes all other players while user's card is still empty
     def randomize_other_empty(self):
         for i in range (2, self.player_count+1): #go through players and append 1st card
             ran_num = random.choice(self.list) #random generate a number from 0-51
@@ -128,7 +129,7 @@ class Poker:
             self.player[i].append(self.deck[ran_num])
             self.deck.pop(ran_num)
 
-
+#clears the board given an amount of cards to be removed
     def randomize_entire_board(self, amount):
         #we copy the list because we need to maintain the original deck
         #sub_deck = self.deck.copy()
@@ -141,17 +142,17 @@ class Poker:
             self.table_cards.append(self.deck[ran_num]) #append the card from deck to table
             self.deck.pop(ran_num) #pop ran_num key value because card already used
 
-    #clears the board
+#clears the board
     def clear_board(self):
         for i in range(5):
             self.table_cards.pop(0)
 
     
-    #clears river and turn or river
+#clears river and turn or river
     def clear_remains(self):
         self.table_cards.pop(-1)
 
-
+#adds a card to the table
     def add_card_board(self, card):
         if card[1]=="Heart": base = 0
         elif card[1]=="Diamond": base = 13
@@ -165,7 +166,7 @@ class Poker:
         self.list[base+numeric] = -1
         self.table_cards.append(self.deck[base+numeric])
         self.deck.pop(base+numeric)
-
+#adds a specified hand to a specified player
     def add_hand(self, hand, player):
         for i in range(2):
             #find index of added card

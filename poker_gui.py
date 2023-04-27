@@ -7,8 +7,6 @@ from Setup_deal import *
 import winners_circle
 import probability
 import copy
-import time
-import sys
 import os
 
 
@@ -43,10 +41,9 @@ def rect(screen):
     pygame.draw.rect(screen, [0, 0, 0], pygame.Rect(555, 330, 90, 115),5) 
     pygame.draw.rect(screen, [0, 0, 0], pygame.Rect(650, 330, 90, 115),5) 
     pygame.draw.rect(screen, [0, 0, 0], pygame.Rect(745, 330, 90, 115),5) 
-
+#make a dictionary with all needed information for all add player buttons
 def addplayer():
     
-    #make a dictionary with all needed information for all add player buttons
     player = {}
     font = pygame.font.SysFont('Arial', 15, bold = True)
     surf = font.render('Add Player +', True, 'white')
@@ -65,7 +62,7 @@ def addplayer():
     player["player7"] = [font, surf, addplayer6]
     player["player6"] = [font, surf, addplayer7]
     return player
-
+#initializes the buttons for adding cards to players and board
 def init_addcard():
     #make a dictinoary with all needed information to make a button that displays
     #and adds cards for player 1 and the board
@@ -87,8 +84,7 @@ def init_addcard():
     add_card["board4"]= [font, surf, board_card4]
     add_card["board5"]= [font, surf, board_card5]
     return add_card
-
-
+#finds the probabilty of each possible position of the hand
 def find_probability(round1, deal_randoms):
     if len(round1.table_cards) == 0 and deal_randoms==True:
         round_sub = copy.deepcopy(round1)
@@ -126,6 +122,8 @@ def find_probability(round1, deal_randoms):
         percentage = probability.proability_allcards_hidden(round_sub, round1.player_count, False)        
 
     return percentage
+#returns the info of the player based on the add player button
+#it will return which outlined cards need to be added to add_card dictionary. 
 def addcard(player_info):
     #this will take in the info of the add player button. it will see which outlined cards need
     #to be added to add_card dictionary. 
@@ -156,8 +154,7 @@ def addcard(player_info):
     list.append(card1)
     list.append(card2)
     return list
-
-
+#this will play and display the GUI
 def play():
     # All Flags 
     reveal_cards_flag = False # flags if user wants to reveal opponent's hidden cards
@@ -173,19 +170,18 @@ def play():
     begin_game_bool =False #indicates start of game of random cards dealt
     show_cards=False #indicates if all cards are displayed to be picked from
     deal_randoms_display = True #indicates if the button for deal randoms is displayed
-
-
     random_cards = {} #keys are players and values are hidden cards that are random 
     #percentage will be the probability of winning. We set to -1 because we set it 
     #at a invalid state
     percentage = -1 
     #will contain information of board cards
     board= 0 
-    #will be a 'player#' key for the dictionary 'cards
+    #playerss will be string 'player#' key for the dictionary 'cards
     playerss = 0
+    #will be either user1 or user2 to indicate which of the user's cards to addcard to
     user =0
+    #indicates number of players in the round
     num_player = 1
-
     #this will be used to display cards in ascending order in interface
     value_cards=["Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", \
         "King", 'default']
@@ -262,19 +258,23 @@ def play():
     while running:    #checks each event and see if it should quit
         #screen fill makes bacground green
         screen.fill([0,128,0])
-        #draws all the empty slots
+        #draws all the empty slots of cards
         rect(screen)
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if (event.key == pygame.K_ESCAPE):
+                    #quits if we click escape
                     return False
             elif (event.type == pygame.QUIT):
+                #quits if we click x button in top right
                 return False
             #if we click on start game, begin the game. There must be atleast 2 players
             if event.type == pygame.MOUSEBUTTONDOWN and play_hand == False:
                 if begin_button.collidepoint(event.pos) and add_player_num!=1:
                     round1 = Poker(num_player)
                     play_hand=True
+            #finds which add player button you clicked and adds player number and creates
+            #add card button for that player
             if event.type == pygame.MOUSEBUTTONDOWN and show_cards==False and play_hand==False:
                 #iterate through each add player button if we press down on the mouse
                 for i in player:
@@ -299,8 +299,8 @@ def play():
                         break
                 #finds the indice of the card picked when the cards are popped up. indice should range from 0,0 - 10,3
                 #anything else is not valid
+            #if cards are being chosen and the user clicks on the screen
             if event.type == pygame.MOUSEBUTTONDOWN and show_cards == True:
-                click_card_flag = True
                 pos = pygame.mouse.get_pos()
                 indiceX = (pos[0]-180)//60
                 indiceY = (pos[1]-200)//90
@@ -310,14 +310,22 @@ def play():
                 #finds the one dimenesional indice for the card
                 base = indiceY*13
                 indice = base + indiceX +indiceY
+                #if the indice of where you picked is in the bounds of sorted_cards, we know the user clicked on
+                #one of the cards. This means we need to use the chosen card and add it to the player's hand
                 if indice<len(sorted_cards)-1 and indice > -1:
+                    #getting rid of the card we picked because should not be in the deck anymore
                     one_card = sorted_cards.pop(indice)
+                    #appending the all_chosen_cards which are all the image cards we've chosen
                     all_chosen_cards.append(one_card)
+                    #storing what card was just popped from listOfcards
                     card_removed= listOfcards.pop(indice)
+                    #after we click on a valid indice, we don't want to display the cards anymore because
+                    #we just picked a card
                     show_cards = False
                     chosen_card.append(removal3)
                     chosen_card2.append(removal2)
-                    #this appends all chosen cards to the table/players
+                    #this appends all chosen cards to the dictionary. If that player, user, or table_card
+                    #doesn't already have cards, create a new key value 
                     for i in round1.deck:
                         if str(round1.deck[i][0]) in card_removed and round1.deck[i][1] in card_removed:
                             if playerss !=0:
@@ -396,13 +404,13 @@ def play():
                 
                         break
             
-
+            #if we click on find probability, display the calculating text 
             if (event.type == pygame.MOUSEBUTTONDOWN and player_flag == True): 
                 if find_prob.collidepoint(event.pos):
                     waiting = font2.render('Calculating.............', True, 'white')
                     screen.blit(waiting,(540, 300))
                     #pygame.draw.rect(screen, (0,128,0), waiting_button)
-    
+                    #this will later be used to indicate if we should find the probaility 
                     waiting_flag=True
     
             #this will be an indicator if we choose random card for opponents
@@ -413,7 +421,8 @@ def play():
             #if we give cards hidden cards, we call the method that does so for the class poker, then set the indicators
                 elif hidden_cards.collidepoint(event.pos):
                     round1.randomize_other_empty()
-                    #setting all used cards in list of cards and sorted cards equal to 0
+                    #setting all used randomized hidden cards in list of cards and sorted cards equal to 0 because we dont
+                    #need those cards anymore because they're already used
                     flag = 0
                     for i in round1.player:
                         if flag !=0:
@@ -425,7 +434,8 @@ def play():
                                     random_cards[i].append(sorted_cards[j])
                                     
                                     sorted_cards[j] = 0
-                                elif listOfcards[j] !=0 and str(round1.player[i][1][0]) in listOfcards[j] and round1.player[i][1][1] in listOfcards[j] and listOfcards[j] !=0:
+                                elif listOfcards[j] !=0 and str(round1.player[i][1][0]) in listOfcards[j] and round1.player[i][1][1] in listOfcards[j] \
+                                    and listOfcards[j] !=0:
                                     listOfcards[j]=0
                                     if i not in random_cards:
                                         random_cards[i] = []
@@ -444,31 +454,20 @@ def play():
                             acc=acc+1
                     deal_randoms=True
                     deal_randoms_display=False
-            if event.type == pygame.MOUSEBUTTONDOWN and play_hand==True and deal_randoms == True and reveal_cards_flag ==True and reveal_cards.collidepoint(event.pos):
+
+
+            #if we reveal cards, then deal_randoms is now set to false because we now see the cards
+            if event.type == pygame.MOUSEBUTTONDOWN and play_hand==True and deal_randoms == True and reveal_cards_flag ==True and \
+                reveal_cards.collidepoint(event.pos):
                 deal_randoms = False
 
 
 
-
+            #resets the game
             if event.type == pygame.MOUSEBUTTONDOWN and reset_button.collidepoint(event.pos):
                 return True
-                
-
-
-            #if click_card_flag == True:
-                #if percentage != -1:
-                    #percentage = find_probability(round1, deal_randoms)
-                    #click_card_flag = False
-     
-
-
+                     
         a,b = pygame.mouse.get_pos()
-        #if show_cards == False and play_hand==True:
-            #for i in add_card:
-                #if add_card[i][2].x<= a <add_card[i][2].x+90 and add_card[i][2].y <= b <= add_card[i][2].y+115:
-                    #static = static+1
-                    #pygame.draw.rect(screen, (180, 180, 180), add_card[i][2])
-                    #break
 
         #loops through player which is information for each button, and if mouse is on top of any 
         #of the add player buttons, highlight
@@ -505,17 +504,6 @@ def play():
                 string2= "Player" + str(i) + "second_card"
                 screen.blit(pygame.transform.scale(card1, (80,105)), (random_cards[string1][2].x, random_cards[string1][2].y))
                 screen.blit(pygame.transform.scale(card2, (80,105)), (random_cards[string2][2].x, random_cards[string2][2].y))
-
-            #print(random_cards)       #use add card info thingy
-            #for i in range(len(round1.player_num-1)):
-                #player_indicator=player_indicator+1
-                #string1 = "Player" + str(player_indicator) + "first_card"
-                #string2 = "Player" + str(player_indicator) + "second_card"
-            
-            #screen.blit(pygame.transform.scale(random_cards[2], (80,105)), (add_card[string1].x, add_card[string1].y))
-            #screen.blit(pygame.transform.scale(random_cards[2], (80,105)), (add_card[string2].x, add_card[string2].y))
-
-    
         #if true, display the cards
         if show_cards == True:
             pygame.draw.rect(screen, (0,128,0), removal2)
@@ -544,6 +532,7 @@ def play():
         if play_hand==False:
             screen.blit(begin_text,(begin_button.x, begin_button.y)) 
 
+        #if we've dealed hidden cards and the user either has 0 or two cards, display a button that will reveal the cards
         if play_hand ==True and deal_randoms_display==True and dont_add_flag ==False:        
             randomize_text = font2.render('Give opponents random hidden cards', True, 'white')
             if hidden_cards.x<= a < hidden_cards.x+325 and  hidden_cards.y <= b <=  hidden_cards.y+22 and play_hand ==True and show_cards==False:
@@ -581,13 +570,14 @@ def play():
                 player_flag = True
                 pygame.draw.rect(screen, (0,128,0), find_prob)
                 screen.blit(find_prob_text,(find_prob.x, find_prob.y)) 
-
+        
+        #if user clicked to find the percentage and show cards is false, then display the percentage of winning
         if percentage != -1 and show_cards == False and winning_flag ==False:
             percent_display = str(percentage) + "% of Winning "
             percent_text = font2.render(percent_display, True, 'white')
             screen.blit(percent_text,(percent_button.x, percent_button.y)) 
         
-
+        #if all cards are layed out on table and all cards are revealed, display the winner
         if play_hand ==True and len(round1.table_cards) == 5 and deal_randoms == False:
             if winning_flag == False:
                 player_acc = 0
@@ -595,6 +585,7 @@ def play():
                     if len(round1.player[i])==2:
                         player_acc =player_acc+1
             if winning_flag==False and player_acc == round1.player_count:
+                #finds the player that won
                 winner = winners_circle.winning_players(round1.player, round1.table_cards, round1.player_count, False)
                 winning_flag=True
                 text = font2.render("Winner!", True, 'green')
@@ -605,7 +596,10 @@ def play():
                         screen.blit(text,(i[0].x+15, i[0].y)) 
                 if 1 in winner:
                     screen.blit(text,(percent_button.x+50, percent_button.y -10)) 
-        
+
+
+            
+        #if we're in the hand and players have hidden cards, always have a reveal card button
         if play_hand == True and deal_randoms == True:
             
             if reveal_cards_flag ==False:
@@ -619,15 +613,10 @@ def play():
                 percent_text = font2.render("Reveal Cards", True, 'white')
                 screen.blit(percent_text,(reveal_cards.x, reveal_cards.y)) 
 
-        screen.blit(reset_text, (reset_button.x, reset_button.y))
-        
-            
-
-            
+        screen.blit(reset_text, (reset_button.x, reset_button.y))    
         pygame.display.update()
-
+        #if we've clicked to find probability, find the probablity in the background
         if waiting_flag ==True:
-        
             percentage = find_probability(round1, deal_randoms)
             waiting_flag = False
 

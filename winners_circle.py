@@ -2,9 +2,12 @@ from Setup_deal import *
 import winner
 import ties_wins
 
-x =0 
+x =0
+#this returns the players that have won or tied 
 def winning_players(player, table_cards, num_player, print_txt):
     players_points = []
+    #these will check what the score of each player will have based on 
+    #they have a pair, flush, three of a kind etc.  
     for i in range(1, num_player+1):
         flush_indicator1=winner.flush(table_cards, player[i])
         straight_indicator1= winner.straight(table_cards, player[i])
@@ -59,7 +62,7 @@ def winning_players(player, table_cards, num_player, print_txt):
     #players_points contain the scores of each player and the index of the scores
     #is an indicator which player has that score. Since players start with 1, 
     #we need to append i+1 because i starts at 0
-    
+    #if there is one sole winner, then return the list with the player
     for i in range(len(players_points)):
         if players_points[i] == bestScore:
             indexOfScores.append(i+1)
@@ -68,11 +71,11 @@ def winning_players(player, table_cards, num_player, print_txt):
             print("Player "+ str(indexOfScores[0])+" wins!")
         winners_circle.append(indexOfScores[0])
 
+    #if we have any ties, call the functions that will deal with the tie_breakers
     elif bestScore == 2:
         winners_circle = ties_wins.pair_ties(players_points, player, table_cards, indexOfScores, print_txt)
     elif bestScore == 3:
         winners_circle = ties_wins.two_pair_tie(players_points, player, table_cards, indexOfScores, print_txt)
-        
     elif bestScore == 4:
         winners_circle = ties_wins.three_tie(players_points, player, table_cards, indexOfScores, print_txt)
     elif bestScore == 5:
@@ -95,6 +98,7 @@ def winning_players(player, table_cards, num_player, print_txt):
         sent=sent + " tied!"
         if print_txt ==True:
             print(sent)
+    #if there are no winners and no ties, we will base the winner on the high card by calling high tie
     else:
         winners_circle = ties_wins.high_tie(players_points, player, table_cards, indexOfScores, print_txt)
 

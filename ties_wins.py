@@ -1,6 +1,9 @@
 from Setup_deal import *
 import winner
-
+#a pair, two_pair, three of a kind, etc are all quantified by a point 
+#system but there are instances where two or more players have the same
+#score. These account for all ties and edge cases and will determine
+#if players actually tie or there is a tie breaker
 def pair_ties(players_points, player, table_cards, indexOfScores, print_txt):
     #this will be the winners circle
     winners_circle = []

@@ -3,7 +3,7 @@ import winners_circle
 import probability
 import copy
 
-#plays the poker round with the terminal
+#plays the poker round in the terminal
 def text_mode():
     while True:
         try: #used so to take a valid input from user
@@ -25,7 +25,7 @@ def text_mode():
         hand = []
         number_cards = ["2","3","4","5","6","7","8","9","10"]
         face_card = ["Jack", "King", "Queen", "Ace"]
-        suit = ["Heart", "Club", "Diamond", "Spade"]
+        suit = ["Heart", "Clove", "Diamond", "Spade"]
         first_card_value = input("Value of first card: ")
         while first_card_value not in number_cards and first_card_value not in face_card:
             first_card_value = input("Please pick a value 2-10 or a valid Face card: ")
@@ -33,7 +33,7 @@ def text_mode():
             first_card_value = int(first_card_value)
         first_card_suit = input("Suit of first card: ")
         while first_card_suit not in suit:
-            first_card_suit = input("Please pick a valid suit. [Heart, Club, Spade, Diamond]: ")
+            first_card_suit = input("Please pick a valid suit. [Heart, Clove, Spade, Diamond]: ")
         second_card_value = input("Value of second card: ")
         while second_card_value not in number_cards and second_card_value not in face_card:
             second_card_value = input("Please pick a value 2-10 or a valid Face card: ")
@@ -41,7 +41,7 @@ def text_mode():
             second_card_value = int(second_card_value)
         second_card_suit = input("Suit of second card: ")
         while second_card_suit not in suit:
-            second_card_suit = input("Please pick a valid suit. [Heart, Club, Spade, Diamond]: ")
+            second_card_suit = input("Please pick a valid suit. [Heart, Clove, Spade, Diamond]: ")
         if second_card_value == first_card_value and second_card_suit == first_card_suit:
             print("Card is already being used! Pick another card.")
             second_card_value = input("Value of second card: ")
@@ -51,7 +51,7 @@ def text_mode():
                 second_card_value = int(second_card_value)
             second_card_suit = input("Suit of second card: ")
             while second_card_suit not in suit:
-                second_card_suit = input("Please pick a valid suit. [Heart, Club, Spade, Diamond]: ")
+                second_card_suit = input("Please pick a valid suit. [Heart, Clove, Spade, Diamond]: ")
         hand.append([first_card_value, first_card_suit])
         hand.append([second_card_value, second_card_suit])
         round1.add_hand(hand, 1)
@@ -145,7 +145,7 @@ def text_mode():
         print_txt=False
         round_sub = copy.deepcopy(round1)
         #true just means we're at post flop with no turn card
-        percentage = probability.probability_postflop_hidden(round_sub, num_player, print_txt, True)
+        percentage = probability.probability_postflop_hidden(round_sub, num_player, print_txt, 3)
         print("You have a "+str(percentage)+"% chance to win with cards: "+ str(round1.player[1][0][0])+" of "+str(round1.player[1][0][1])+\
         "s || " + str(round1.player[1][1][0])+" of "+ str(round1.player[1][1][1])+"s")
 
@@ -175,7 +175,7 @@ def text_mode():
         print_txt=False
         round_sub = copy.deepcopy(round1)
         #false means we're at the turn card
-        percentage = probability.probability_postflop_hidden(round_sub, num_player, print_txt, False)
+        percentage = probability.probability_postflop_hidden(round_sub, num_player, print_txt, 4)
         print("You have a "+str(percentage)+"% chance to win with cards: "+ str(round1.player[1][0][0])+" of "+str(round1.player[1][0][1])+\
         "s || " + str(round1.player[1][1][0])+" of "+ str(round1.player[1][1][1])+"s")
 
@@ -189,25 +189,6 @@ def text_mode():
     print("~ ~ ~ ~ ~ ~   "+ str(round1.table_cards[3][0])+ " of "+str(round1.table_cards[3][1])+"s")
     print("~ ~ ~ ~ ~ ~   "+ str(round1.table_cards[4][0])+ " of "+str(round1.table_cards[4][1])+"s")
 
-    #table_cards = []
-    #table_cards.append([4, "Heart"])
-    #table_cards.append([7, "Spade"])
-    #table_cards.append([10, "Clove"])
-    #table_cards.append(["Jack", "Heart"])
-    #table_cards.append([2, "Diamond"])
-    #player = {}
-    #player[1]=[]
-    #player[1].append([3, "Heart"])
-    #player[1].append([8, "Spade"])
-    #player[2]=[]
-    #player[2].append(["Ace", "Clove"])
-    #player[2].append([9, "Heart"])
-    #player[3]=[]
-    #player[3].append(["Ace", "Heart"])
-    #player[3].append([8, "Spade"])
-    #player[4]=[]
-    #player[4].append([5, "Clove"])
-    #player[4].append([9, "Diamond"])
     print("\nYour cards are: "+ str(round1.player[1][0][0])+" of "+str(round1.player[1][0][1])+\
     "s || " + str(round1.player[1][1][0])+" of "+ str(round1.player[1][1][1])+"s \n")
     print("---------------------------------------------------")

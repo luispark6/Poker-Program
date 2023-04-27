@@ -1,4 +1,4 @@
-
+#these will indicate what score the player recieves based on what they have
 def straight(table_cards, player):
     ordered_7 = {}
     player_list=[]
@@ -63,9 +63,6 @@ def straight(table_cards, player):
     
     #returns False if straight has not been hit
     return [False, 0]
-
-
-
 
 #checks for four of a kind
 def four(table_cards, player):
@@ -219,9 +216,6 @@ def pair(table_cards, player):
         return [True, list, [ordered_list[-1]]]
     #return false if no pairs
     return [False, list]
-
-
-
 def flush(table_cards, player):
     suit = "Nothing"
     hit = False
@@ -253,8 +247,6 @@ def flush(table_cards, player):
     else:
         #return false and empty list if no flush
         return[hit, suit]
-
-
 def high_card(table_card, player):
     list=[]
     #quantify face cards and add to list. 
@@ -277,8 +269,6 @@ def high_card(table_card, player):
     quickSort(list, 0, len(list)-1)
     #return the list
     return list
-
-
 def partition(array, low, high):
     # choose the rightmost element as pivot
     pivot = array[high]
