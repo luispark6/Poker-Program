@@ -159,23 +159,29 @@ def addcard(player_info):
 
 
 def play():
-    
-    dont_add_flag = False
-    random_cards = {}
-    reveal_cards_flag = False
+    # All Flags 
+    reveal_cards_flag = False # flags if user wants to reveal opponent's hidden cards
+    dont_add_flag = False #flag for if user len(cards) is not 0 or 2
+    winning_flag = False #flag that indicates if winner has been determined
+    waiting_flag = False #flag that indicates if we're currently calculating probabiltiy
+    player_flag = False #flag that indicates if each player has two cards
+    copy_indicator=False #flag that indicates if add_card dictionary has been copied
+    pop_indicator = True #flags if we have popped all random cards from add_card
+    running = True #determines if the game is running
+    play_hand = False #determines if poker object intitalized/indicates start of game
+    deal_randoms = False #indicates if the opponents cards are randomly dealt and hidden
+    begin_game_bool =False #indicates start of game of random cards dealt
+    show_cards=False #indicates if all cards are displayed to be picked from
+    deal_randoms_display = True #indicates if the button for deal randoms is displayed
+
+
+    random_cards = {} #keys are players and values are card
     reveal_cards =  pygame.Rect(535, 550, 95, 22)
-    winning_flag = False
-    waiting_flag = False
-    click_card_flag = False
     percentage = -1
-    play_hand_flag = False
-    player_flag = False
     board= 0 
     playerss = 0
     user =0
     num_player = 1
-    copy_indicator=False
-    pop_indicator = True
     #this will be used to display cards in ascending order in interface
     value_cards=["Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", 'default']
     FPS_CLOCK = pygame.time.Clock()
@@ -187,9 +193,7 @@ def play():
     pygame.display.set_caption("Poker")
     #displays green background
     screen.fill([0,128,0])
-    running = True
     #indicator that checks if a slot has been chosen
-    slot_chosen = False
     #unsorted cards will be the png files in unsorted order
     unsorted_cards = []
     #this will iterate through the file and append the file names in unsorted_cards
@@ -207,7 +211,7 @@ def play():
     font = pygame.font.SysFont('Arial', 15, bold = True)
     surf = font.render('', True, 'white')
     #indicator if hand has begun
-    play_hand = False
+    
     font2 = pygame.font.SysFont('Arial', 18, bold = True)
     begin_game_text = font.render('Please add players before starting the hand', True, 'white')
     for i in range(len(value_cards)):
@@ -215,8 +219,6 @@ def play():
             if value_cards[i] in unsorted_cards[j]:
                 sorted_cards.append(pygame.image.load(unsorted_cards[j]))
                 listOfcards.append(unsorted_cards[j])
-    deal_randoms = False
-    begin_game_bool =False
     #accumulator for how many popped cards
     x_y_acc= 0
     #returns a dictionaries of all things needed to make a add player button
@@ -227,7 +229,7 @@ def play():
     add_card = init_addcard()
     #this will be used to indicate which number player has been added
     add_player_num = 1
-    show_cards=False
+    
     #this will contain the player in which the user picks the card for
     card_player =[]
     #list of all chosen cards
@@ -245,7 +247,7 @@ def play():
     hidden_cards = pygame.Rect(425, 450, 325, 22)
     find_prob = pygame.Rect(365, 450, 450, 22)
     find_prob_text = font2.render('Click Here To Calculate Your Percentage of Winning!', True, 'white')
-    deal_randoms_display = True
+    
     card = {}
     percent_button = pygame.Rect(510, 640, 90, 20)
     while running:    #checks each event and see if it should quit
