@@ -12,35 +12,35 @@ import os
 
 def rect(screen):
     #both cards bottom middle
-    pygame.draw.rect(screen, [0, 0, 0], pygame.Rect(505, 660, 90, 115), 5) 
-    pygame.draw.rect(screen, [0, 0, 0], pygame.Rect(605, 660, 90, 115),5) 
+    pygame.draw.rect(screen, [240,255,240], pygame.Rect(505, 660, 90, 115), 5, 10) 
+    pygame.draw.rect(screen, [240,255,240], pygame.Rect(605, 660, 90, 115),5,10) 
     #both cards in bottom left
-    pygame.draw.rect(screen, [0, 0, 0], pygame.Rect(150, 575, 90, 115), 5) 
-    pygame.draw.rect(screen, [0, 0, 0], pygame.Rect(250, 575, 90, 115),5) 
+    pygame.draw.rect(screen, [240,255,240], pygame.Rect(150, 575, 90, 115), 5, 10) 
+    pygame.draw.rect(screen, [240,255,240], pygame.Rect(250, 575, 90, 115),5, 10) 
     #both cards middle left
-    pygame.draw.rect(screen, [0, 0, 0], pygame.Rect(0, 342, 90, 115), 5) 
-    pygame.draw.rect(screen, [0, 0, 0], pygame.Rect(100, 342, 90, 115),5) 
+    pygame.draw.rect(screen, [240,255,240], pygame.Rect(0, 342, 90, 115), 5, 10) 
+    pygame.draw.rect(screen, [240,255,240], pygame.Rect(100, 342, 90, 115),5, 10) 
     #both cards top middle
-    pygame.draw.rect(screen, [0, 0, 0], pygame.Rect(505, 0, 90, 115), 5) 
-    pygame.draw.rect(screen, [0, 0, 0], pygame.Rect(605, 0, 90, 115),5) 
+    pygame.draw.rect(screen, [240,255,240], pygame.Rect(505, 0, 90, 115), 5, 10) 
+    pygame.draw.rect(screen, [240,255,240], pygame.Rect(605, 0, 90, 115),5, 10) 
     #both cards top left
-    pygame.draw.rect(screen, [0, 0, 0], pygame.Rect(150, 100, 90, 115), 5) 
-    pygame.draw.rect(screen, [0, 0, 0], pygame.Rect(250, 100, 90, 115),5) 
+    pygame.draw.rect(screen, [240,255,240], pygame.Rect(150, 100, 90, 115), 5, 10) 
+    pygame.draw.rect(screen, [240,255,240], pygame.Rect(250, 100, 90, 115),5, 10) 
     #both cards in bottom right
-    pygame.draw.rect(screen, [0, 0, 0], pygame.Rect(960, 575, 90, 115), 5) 
-    pygame.draw.rect(screen, [0, 0, 0], pygame.Rect(860, 575, 90, 115),5) 
+    pygame.draw.rect(screen, [240,255,240], pygame.Rect(960, 575, 90, 115), 5, 10) 
+    pygame.draw.rect(screen, [240,255,240], pygame.Rect(860, 575, 90, 115),5, 10) 
     #both cards middle right
-    pygame.draw.rect(screen, [0, 0, 0], pygame.Rect(1110, 342, 90, 115), 5) 
-    pygame.draw.rect(screen, [0, 0, 0], pygame.Rect(1010, 342, 90, 115),5) 
+    pygame.draw.rect(screen, [240,255,240], pygame.Rect(1110, 342, 90, 115), 5, 10) 
+    pygame.draw.rect(screen, [240,255,240], pygame.Rect(1010, 342, 90, 115),5, 10) 
     #both cards in bottom right
-    pygame.draw.rect(screen, [0, 0, 0], pygame.Rect(960, 100, 90, 115), 5) 
-    pygame.draw.rect(screen, [0, 0, 0], pygame.Rect(860, 100, 90, 115),5) 
+    pygame.draw.rect(screen, [240,255,240], pygame.Rect(960, 100, 90, 115), 5, 10) 
+    pygame.draw.rect(screen, [240,255,240], pygame.Rect(860, 100, 90, 115),5, 10) 
     #cards on the board
-    pygame.draw.rect(screen, [0, 0, 0], pygame.Rect(365, 330, 90, 115),5) 
-    pygame.draw.rect(screen, [0, 0, 0], pygame.Rect(460, 330, 90, 115),5) 
-    pygame.draw.rect(screen, [0, 0, 0], pygame.Rect(555, 330, 90, 115),5) 
-    pygame.draw.rect(screen, [0, 0, 0], pygame.Rect(650, 330, 90, 115),5) 
-    pygame.draw.rect(screen, [0, 0, 0], pygame.Rect(745, 330, 90, 115),5) 
+    pygame.draw.rect(screen, [240,255,240], pygame.Rect(365, 330, 90, 115),5, 10) 
+    pygame.draw.rect(screen, [240,255,240], pygame.Rect(460, 330, 90, 115),5, 10) 
+    pygame.draw.rect(screen, [240,255,240], pygame.Rect(555, 330, 90, 115),5, 10) 
+    pygame.draw.rect(screen, [240,255,240], pygame.Rect(650, 330, 90, 115),5, 10) 
+    pygame.draw.rect(screen, [240,255,240], pygame.Rect(745, 330, 90, 115),5, 10) 
 #make a dictionary with all needed information for all add player buttons
 def addplayer():
     
@@ -193,7 +193,9 @@ def play():
     #name
     pygame.display.set_caption("Poker")
     #displays green background
-    screen.fill([0,128,0])
+    bg_img = pygame.image.load('galaxy.png')
+    bg_img = pygame.transform.scale(bg_img,(1200,775))
+    #screen.fill([0,128,0])
     #indicator that checks if a slot has been chosen
     #unsorted cards will be the png files in unsorted order
     unsorted_cards = []
@@ -246,7 +248,7 @@ def play():
     #All information below are rectangle, font, and text information for display
     reveal_cards =  pygame.Rect(535, 550, 95, 22) 
     begin_text = font2.render('Play Hand!', True, 'white')
-    reset_text = font2.render('Reset!', True, 'red')
+    reset_text = font2.render('Reset!', True, (248,248,255))
     reset_button = pygame.Rect(20, 20, 55, 20)
     begin_button = pygame.Rect(556, 450, 95, 22)
     hidden_cards = pygame.Rect(425, 450, 325, 22)
@@ -257,7 +259,8 @@ def play():
     percent_button = pygame.Rect(510, 640, 90, 20)
     while running:    #checks each event and see if it should quit
         #screen fill makes bacground green
-        screen.fill([0,128,0])
+        #screen.fill([0,128,0])
+        screen.blit(bg_img, (0,0))
         #draws all the empty slots of cards
         rect(screen)
         for event in pygame.event.get():
@@ -475,8 +478,6 @@ def play():
             for i in player:
                 if player[i][2].x<= a <player[i][2].x+94 and player[i][2].y <= b <= player[i][2].y+20:
                     pygame.draw.rect(screen, (180, 180, 180), player[i][2])
-                else:
-                    pygame.draw.rect(screen, (0,128,0), player[i][2])
                 #loops over players and displays all the buttons
            
                 screen.blit(player[i][1],(player[i][2].x, player[i][2].y))
@@ -506,7 +507,6 @@ def play():
                 screen.blit(pygame.transform.scale(card2, (80,105)), (random_cards[string2][2].x, random_cards[string2][2].y))
         #if true, display the cards
         if show_cards == True:
-            pygame.draw.rect(screen, (0,128,0), removal2)
             x=180
             y=200
             for i in range(len(sorted_cards)):
@@ -527,8 +527,6 @@ def play():
         #if we're not currently playing the hand, provide a button to start the game if wanted
         if begin_button.x<= a <begin_button.x+95 and begin_button.y <= b <= begin_button.y+22 and play_hand==False:
             pygame.draw.rect(screen, (180, 180, 180), begin_button)
-        elif play_hand==False:
-            pygame.draw.rect(screen, (0,128,0), begin_button)
         if play_hand==False:
             screen.blit(begin_text,(begin_button.x, begin_button.y)) 
 
@@ -537,8 +535,6 @@ def play():
             randomize_text = font2.render('Give opponents random hidden cards', True, 'white')
             if hidden_cards.x<= a < hidden_cards.x+325 and  hidden_cards.y <= b <=  hidden_cards.y+22 and play_hand ==True and show_cards==False:
                 pygame.draw.rect(screen, (180,180,180), hidden_cards)
-            elif play_hand==True and show_cards==False:
-                pygame.draw.rect(screen, (0,128,0), hidden_cards)
             if play_hand==True and show_cards==False:
                 screen.blit(randomize_text,(hidden_cards.x, hidden_cards.y)) 
 
@@ -566,9 +562,8 @@ def play():
                         player_acc =player_acc+1
 
             if player_acc == round1.player_count:
-                
                 player_flag = True
-                pygame.draw.rect(screen, (0,128,0), find_prob)
+
                 screen.blit(find_prob_text,(find_prob.x, find_prob.y)) 
         
         #if user clicked to find the percentage and show cards is false, then display the percentage of winning
