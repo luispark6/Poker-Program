@@ -258,8 +258,6 @@ def play():
     card = {}
     percent_button = pygame.Rect(510, 640, 90, 20)
     while running:    #checks each event and see if it should quit
-        #screen fill makes bacground green
-        #screen.fill([0,128,0])
         screen.blit(bg_img, (0,0))
         #draws all the empty slots of cards
         rect(screen)
