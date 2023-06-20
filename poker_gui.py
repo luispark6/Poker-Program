@@ -9,7 +9,6 @@ import probability
 import copy
 import os
 
-
 def rect(screen):
     #both cards bottom middle
     pygame.draw.rect(screen, [240,255,240], pygame.Rect(505, 660, 90, 115), 5, 10) 
