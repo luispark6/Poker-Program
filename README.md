@@ -1,7 +1,7 @@
 # Poker-Program
 Introducing a poker program that accurately predicts the statistical probabilities of winning a poker hand. 
-The program requires pygame to be installed and to run the program, run main.py. 
-main.py offers two modes: terminal and sunset poker GUI. The sunset poker GUI is a more 
+The program requires the pygame library to be installed. To run the program, run main.py in terminal.  
+main.py offers two modes: terminal mode and sunset poker mode. The sunset poker GUI is a more 
 user-friendly version of the terminal mode and features a graphical display that enables you to check your winning 
 probabilities in any given instance as long as you have two cards and other opponents also have two cards.
 
