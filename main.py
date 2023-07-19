@@ -4,7 +4,7 @@ import poker_gui
 def main():
     while True:
         try: #used so to take a valid input from user
-            num_player = int(input(("Would you like to play in terminal(1) or on GUI(2): ")))
+            num_player = int(input(("Would you like to play in terminal(1) or on GUI(2) ")))
             x = int(num_player)
             if x==2 or x==1:
                 break #breaks if valid1 int is inputted
